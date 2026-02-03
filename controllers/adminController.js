@@ -1,20 +1,30 @@
+const User = require("../models/User");
+const Attendance = require("../models/Attendance");
+const Complaint = require("../models/Complaint");
+const MessOff = require("../models/MessOff");
 const Payment = require("../models/Payment");
 const FoodQuantityConfig = require("../models/FoodQuantityConfig");
-const User = require("../models/User");
 
 exports.getDashboard = async (req, res) => {
   try {
+    console.log("=== Admin Dashboard Debug ===");
+    console.log("User:", req.user);
+    console.log("Role:", req.user?.role);
+
     const [students, unpaidCount] = await Promise.all([
       User.countDocuments({ role: "student" }),
       Payment.countDocuments({ status: "unpaid" }),
     ]);
 
+    console.log("Students count:", students);
+    console.log("Unpaid count:", unpaidCount);
+
     res.render("admin/dashboard", {
       title: "Admin Dashboard",
       students,
       unpaidCount,
-      currentUser: req.user,
-      role: req.user.role
+      currentUser: req.user || { name: "Admin User" },
+      role: req.user?.role || "admin"
     });
   } catch (err) {
     console.error("Dashboard error:", err);
@@ -91,8 +101,8 @@ exports.getUsers = async (req, res) => {
     res.render("admin/users", { 
       title: "User Management", 
       users, 
-      currentUser: req.user, 
-      role: req.user.role 
+      currentUser: req.user || { name: "Admin User" }, 
+      role: req.user?.role || "admin" 
     });
   } catch (err) {
     console.error("Users error:", err);
@@ -124,8 +134,8 @@ exports.getReports = async (req, res) => {
     res.render("admin/reports", { 
       title: "Reports & Analytics", 
       reports,
-      currentUser: req.user, 
-      role: req.user.role 
+      currentUser: req.user || { name: "Admin User" }, 
+      role: req.user?.role || "admin" 
     });
   } catch (err) {
     console.error("Reports error:", err);
@@ -147,8 +157,8 @@ exports.getSettings = async (req, res) => {
     res.render("admin/settings", { 
       title: "System Settings", 
       settings,
-      currentUser: req.user, 
-      role: req.user.role 
+      currentUser: req.user || { name: "Admin User" }, 
+      role: req.user?.role || "admin" 
     });
   } catch (err) {
     console.error("Settings error:", err);
@@ -180,8 +190,8 @@ exports.getDatabase = async (req, res) => {
     res.render("admin/database", { 
       title: "Database Management", 
       dbStats,
-      currentUser: req.user, 
-      role: req.user.role 
+      currentUser: req.user || { name: "Admin User" }, 
+      role: req.user?.role || "admin" 
     });
   } catch (err) {
     console.error("Database error:", err);
