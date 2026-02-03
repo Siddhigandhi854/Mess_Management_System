@@ -1,4 +1,12 @@
 {
+  "name": "mess-management-system",
+  "version": "1.0.0",
+  "description": "Complete mess management system with real-time attendance, menu, and payment tracking",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node app.js"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
