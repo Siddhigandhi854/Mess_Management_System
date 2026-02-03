@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Mess Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'bounce-slow': 'bounce 2s infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            bounce: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1a1a2e;
+      background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6)),
+        url('https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      position: relative;
+      background-repeat: no-repeat;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.15) 0%, 
+        rgba(147, 51, 234, 0.1) 50%, 
+        rgba(236, 72, 153, 0.1) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .container {
+      position: relative;
+      z-index: 2;
+    }
+    .glass-morphism {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .glass-morphism::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.1), 
+        transparent);
+      transition: left 0.5s;
+    }
+    .glass-morphism:hover::before {
+      left: 100%;
+    }
+    .glass-morphism:hover {
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    .stat-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .stat-card:hover::after {
+      opacity: 1;
+    }
+    .stat-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+    .hover-lift {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+    .hover-lift:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+    }
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-success::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    .btn-success:hover::before {
+      left: 100%;
+    }
+    .btn-success:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-danger::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    .btn-danger:hover::before {
+      left: 100%;
+    }
+    .btn-danger:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(239, 68, 68, 0.4);
+    }
+    .form-input {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      color: white;
+    }
+    .form-input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .icon-pulse {
+      animation: iconPulse 2s infinite;
+    }
+    @keyframes iconPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .text-glow {
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <%- include('../_header') %>
+  <main class="container mx-auto px-6 py-12">
+    <div class="mb-8 text-center">
+      <div class="inline-block mb-4">
+        <div class="w-24 h-24 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full flex items-center justify-center animate-float icon-pulse">
+          <i class="fas fa-utensils text-white text-4xl"></i>
+        </div>
+      </div>
+      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow text-glow">Welcome, <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"><%= currentUser.name %></span>!</h1>
+      <p class="text-purple-200 text-lg">Mess Staff Dashboard - Manage Everything Here</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="stat-card rounded-xl p-6 border-l-4 border-blue-400 hover-lift">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-purple-200 font-semibold">Today's Attendance</p>
+            <p class="text-3xl font-bold text-white mt-2"><%= todayCount %></p>
+          </div>
+          <div class="w-14 h-14 bg-blue-400 rounded-full flex items-center justify-center animate-pulse">
+            <i class="fas fa-users text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card rounded-xl p-6 border-l-4 border-orange-400 hover-lift">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-purple-200 font-semibold">Pending Complaints</p>
+            <p class="text-3xl font-bold text-white mt-2"><%= complaints.length %></p>
+          </div>
+          <div class="w-14 h-14 bg-orange-400 rounded-full flex items-center justify-center animate-pulse">
+            <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card rounded-xl p-6 border-l-4 border-green-400 hover-lift">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-purple-200 font-semibold">Total Balance</p>
+            <p class="text-3xl font-bold text-green-300 mt-2">₹<%= unpaidBills.reduce((sum, bill) => sum + bill.amount, 0).toLocaleString() %></p>
+          </div>
+          <div class="w-14 h-14 bg-green-400 rounded-full flex items-center justify-center animate-pulse">
+            <i class="fas fa-coins text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card rounded-xl p-6 border-l-4 border-red-400 hover-lift">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-purple-200 font-semibold">Unpaid Bills</p>
+            <p class="text-3xl font-bold text-white mt-2"><%= unpaidBills.length %></p>
+          </div>
+          <div class="w-14 h-14 bg-red-400 rounded-full flex items-center justify-center animate-pulse">
+            <i class="fas fa-file-invoice text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2">
+        <div class="glass-morphism rounded-xl p-8">
+          <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-tools text-blue-400"></i> Management Tools
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <a href="/mess/attendance" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
+              <i class="fas fa-user-check"></i> Attendance
+            </a>
+            <a href="/mess/complaints" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
+              <i class="fas fa-tasks"></i> Complaints
+            </a>
+            <a href="/mess/payments" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
+              <i class="fas fa-money-bill"></i> Payments
+            </a>
+            <a href="/mess/menu" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
+              <i class="fas fa-utensils"></i> Menu
+            </a>
+            <a href="/mess/messoff" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
+              <i class="fas fa-calendar"></i> Mess Off
+            </a>
+            <a href="/mess/settings" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
+              <i class="fas fa-cog"></i> Settings
+            </a>
+          </div>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-exclamation-circle text-orange-400"></i> Recent Complaints
+          </h3>
+          <div class="space-y-4">
+            <% if (complaints.length === 0) { %>
+              <div class="text-center py-8">
+                <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-check-circle text-white text-2xl"></i>
+                </div>
+                <p class="text-purple-200">No pending complaints</p>
+              </div>
+            <% } else { %>
+              <% complaints.forEach(complaint => { %>
+                <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 rounded-lg hover:scale-105 transform transition-all duration-300">
+                  <div class="flex items-start justify-between">
+                    <div>
+                      <p class="font-bold text-white"><%= complaint.subject %></p>
+                      <p class="text-sm text-white mt-1">Reported by <%= complaint.student ? complaint.student.name : 'Unknown' %> - <%= new Date(complaint.createdAt).toLocaleDateString() %></p>
+                    </div>
+                    <span class="bg-yellow-300 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold">Pending</span>
+                  </div>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="glass-morphism rounded-xl p-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-utensils text-orange-400"></i> Today's Menu
+          </h3>
+          <div class="space-y-4">
+            <div class="bg-gradient-to-r from-yellow-400 to-orange-400 rounded-lg p-4 hover:scale-105 transform transition-all duration-300">
+              <p class="font-bold text-white text-sm">🌅 Breakfast</p>
+              <p class="text-sm text-white mt-2">Poha, Jalebi, Tea/Milk</p>
+            </div>
+            <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-lg p-4 hover:scale-105 transform transition-all duration-300">
+              <p class="font-bold text-white text-sm">🍽️ Lunch</p>
+              <p class="text-sm text-white mt-2">Roti, Chana Masala, Rice</p>
+            </div>
+            <div class="bg-gradient-to-r from-purple-400 to-pink-400 rounded-lg p-4 hover:scale-105 transform transition-all duration-300">
+              <p class="font-bold text-white text-sm">🌙️ Dinner</p>
+              <p class="text-sm text-white mt-2">Dal Roti, Mixed Vegetable</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+            <i class="fas fa-calculator text-blue-400"></i> Food Calculator
+          </h3>
+          <div class="space-y-4">
+            <div class="bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg p-4">
+              <div class="text-white">
+                <p class="font-bold mb-2">🍚️ Daily Food Requirements</p>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span class="text-purple-200">Students Present:</span>
+                    <span class="font-bold"><%= todayCount %></span>
+                  </div>
+                  <div>
+                    <span class="text-purple-200">Rice (kg):</span>
+                    <span class="font-bold"><%= (todayCount * 0.2).toFixed(1) %></span>
+                  </div>
+                  <div>
+                    <span class="text-purple-200">Wheat Flour (kg):</span>
+                    <span class="font-bold"><%= (todayCount * 0.15).toFixed(1) %></span>
+                  </div>
+                  <div>
+                    <span class="text-purple-200">Dal (liters):</span>
+                    <span class="font-bold"><%= (todayCount * 0.1).toFixed(1) %></span>
+                  </div>
+                  <div>
+                    <span class="text-purple-200">Vegetables (kg):</span>
+                    <span class="font-bold"><%= (todayCount * 0.15).toFixed(1) %></span>
+                  </div>
+                  <div>
+                    <span class="text-purple-200">Rotis:</span>
+                    <span class="font-bold"><%= (todayCount * 2) %></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-gradient-to-r from-green-400 to-teal-400 rounded-lg p-4">
+              <div class="text-white">
+                <p class="font-bold mb-2">📊 Per Student Breakdown</p>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span class="text-purple-200">Rice:</span>
+                    <span class="font-bold">200g</span>
+                  </div>
+                  <div>
+                    <span class="text-purple-200">Flour:</span>
+                    <span class="font-bold">150g</span>
+                  </div>
+                  <div>
+                    <span class="text-purple-200">Dal:</span>
+                    <span class="font-bold">100ml</span>
+                  </div>
+                  <div>
+                    <span class="text-purple-200">Vegetables:</span>
+                    <span class="font-bold">150g</span>
+                  </div>
+                  <div>
+                    <span class="text-purple-200">Rotis:</span>
+                    <span class="font-bold">2 pcs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+            <i class="fas fa-chart-bar text-green-400"></i> Quick Stats
+          </h3>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-purple-200">Total Students</span>
+              <span class="text-white font-bold"><%= totalStudents || 0 %></span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-purple-200">Active Today</span>
+              <span class="text-white font-bold"><%= todayCount %></span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-purple-200">Mess Off</span>
+              <span class="text-white font-bold"><%= upcomingMessOffs.length %></span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-purple-200">Pending Bills</span>
+              <span class="text-white font-bold"><%= unpaidBills.length %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <%- include('../_footer') %>
+</body>
+</html>

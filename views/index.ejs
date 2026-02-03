@@ -1,0 +1,178 @@
+<% 
+content = `
+<main class="container mx-auto px-6 py-20">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div>
+      <h1 class="text-5xl font-bold text-white mb-6 animate-pulse-slow">
+        Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">MessHub</span>
+      </h1>
+      <p class="text-xl text-purple-200 mb-8">
+        Your complete mess management solution. Streamline operations, track attendance, manage payments, and keep everyone connected.
+      </p>
+      
+      <div class="space-y-6 mb-8">
+        <div class="flex items-center gap-4 hover:scale-105 transform transition-all duration-300">
+          <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+            <i class="fas fa-check-circle text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-white font-bold text-lg">Real-time Tracking</h3>
+            <p class="text-purple-200">Monitor attendance and mess operations live</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-4 hover:scale-105 transform transition-all duration-300">
+          <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+            <i class="fas fa-credit-card text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-white font-bold text-lg">Easy Payments</h3>
+            <p class="text-purple-200">Secure and convenient payment processing</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-4 hover:scale-105 transform transition-all duration-300">
+          <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+            <i class="fas fa-users text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-white font-bold text-lg">Role-based Access</h3>
+            <p class="text-purple-200">Customized dashboards for every user type</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex gap-4">
+        <a href="/auth/register" class="btn-primary text-white px-8 py-4 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform">
+          <i class="fas fa-user-plus mr-2"></i> Get Started
+        </a>
+        <a href="/auth/login" class="btn-primary text-white px-8 py-4 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform">
+          <i class="fas fa-sign-in-alt mr-2"></i> Login
+        </a>
+      </div>
+    </div>
+    
+    <div class="hidden lg:block">
+      <div class="glass-morphism rounded-2xl p-8 animate-float">
+        <div class="grid grid-cols-2 gap-6">
+          <div class="text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-chart-line text-white text-2xl"></i>
+            </div>
+            <h3 class="text-white font-bold mb-2">Analytics</h3>
+            <p class="text-purple-200 text-sm">Track performance metrics</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-teal-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-utensils text-white text-2xl"></i>
+            </div>
+            <h3 class="text-white font-bold mb-2">Menu Management</h3>
+            <p class="text-purple-200 text-sm">Plan and organize meals</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-bell text-white text-2xl"></i>
+            </div>
+            <h3 class="text-white font-bold mb-2">Notifications</h3>
+            <p class="text-purple-200 text-sm">Stay updated instantly</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-shield-alt text-white text-2xl"></i>
+            </div>
+            <h3 class="text-white font-bold mb-2">Secure</h3>
+            <p class="text-purple-200 text-sm">Your data is protected</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+`
+%>
+<%- include('layout') %>
+        
+        <% if (!currentUser) { %>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/auth/login" class="btn-primary text-white px-8 py-4 rounded-lg font-bold text-lg text-center flex items-center justify-center gap-2">
+              <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            <a href="/auth/register" class="btn-primary text-white px-8 py-4 rounded-lg font-bold text-lg text-center flex items-center justify-center gap-2">
+              <i class="fas fa-user-plus"></i> Register
+            </a>
+          </div>
+        <% } else { %>
+          <div class="bg-green-50 border-2 border-green-300 rounded-lg p-6 inline-block">
+            <p class="text-lg text-green-800"><i class="fas fa-check-circle text-green-600 mr-2"></i>You are logged in as <span class="font-bold"><%= role === 'messKaki' ? 'Mess Staff' : role.charAt(0).toUpperCase() + role.slice(1) %></span></p>
+          </div>
+        <% } %>
+
+        <div class="grid grid-cols-3 gap-6 mt-12">
+          <div class="text-center">
+            <div class="text-4xl font-bold text-purple-600 mb-2">500+</div>
+            <p class="text-gray-600">Active Users</p>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-purple-600 mb-2">100%</div>
+            <p class="text-gray-600">Transparent</p>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-purple-600 mb-2">24/7</div>
+            <p class="text-gray-600">Support</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden lg:block">
+        <div class="bg-gradient-to-br from-purple-400 to-pink-400 rounded-2xl p-8 card-shadow">
+          <div class="bg-white rounded-xl p-8">
+            <div class="space-y-4">
+              <div class="h-4 bg-gradient-to-r from-purple-200 to-pink-200 rounded-full"></div>
+              <div class="h-4 bg-purple-200 rounded-full w-3/4"></div>
+              <div class="space-y-3 pt-4">
+                <div class="h-3 bg-gray-200 rounded-full"></div>
+                <div class="h-3 bg-gray-200 rounded-full"></div>
+                <div class="h-3 bg-gray-200 rounded-full w-2/3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="mt-20">
+      <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Why Choose MessHub?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="card-shadow bg-white rounded-xl p-8 text-center hover:translate-y-[-5px] transition">
+          <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-chart-line text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Easy Tracking</h3>
+          <p class="text-gray-600">Monitor attendance, payments, and expenses with real-time analytics and reports.</p>
+        </div>
+
+        <div class="card-shadow bg-white rounded-xl p-8 text-center hover:translate-y-[-5px] transition">
+          <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-lock text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Secure & Reliable</h3>
+          <p class="text-gray-600">Your data is encrypted and safe. Enterprise-grade security for all users.</p>
+        </div>
+
+        <div class="card-shadow bg-white rounded-xl p-8 text-center hover:translate-y-[-5px] transition">
+          <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-users text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Collaboration</h3>
+          <p class="text-gray-600">Work together seamlessly with students, staff, and administration.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <%- include('_footer') %>
+</body>
+</html>

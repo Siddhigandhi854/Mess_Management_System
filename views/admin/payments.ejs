@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Mess Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #2d1b1b;
+      background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)),
+        url('https://images.unsplash.com/photo-1497366216548-375f7030fcf0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      position: relative;
+      background-repeat: no-repeat;
+    }
+    .glass-morphism {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+    .form-input {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      color: white;
+    }
+    .form-input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <%- include('../_header') %>
+  <main class="container mx-auto px-6 py-12">
+    <div class="mb-8">
+      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Payment Management</h1>
+      <p class="text-purple-200 text-lg">Track and manage student payments</p>
+    </div>
+
+    <div class="glass-morphism rounded-xl p-8 mb-8">
+      <div class="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+          <i class="fas fa-credit-card text-yellow-400"></i> Payment Records
+        </h2>
+        
+        <form method="GET" class="flex gap-4">
+          <select name="month" class="form-input px-4 py-2 rounded-lg">
+            <option value="">All Months</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+          
+          <select name="year" class="form-input px-4 py-2 rounded-lg">
+            <option value="">All Years</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+          </select>
+          
+          <button type="submit" class="btn-primary text-white px-4 py-2 rounded-lg hover:shadow-xl transition hover:scale-105 transform">
+            <i class="fas fa-filter"></i> Filter
+          </button>
+        </form>
+      </div>
+
+      <% if (payments.length === 0) { %>
+        <div class="text-center py-12">
+          <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-inbox text-white text-2xl"></i>
+          </div>
+          <p class="text-purple-200 text-lg">No payment records found</p>
+        </div>
+      <% } else { %>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-purple-300">
+                <th class="text-left text-white font-bold py-3 px-4">Student</th>
+                <th class="text-left text-white font-bold py-3 px-4">Month</th>
+                <th class="text-left text-white font-bold py-3 px-4">Year</th>
+                <th class="text-left text-white font-bold py-3 px-4">Amount</th>
+                <th class="text-left text-white font-bold py-3 px-4">Status</th>
+                <th class="text-left text-white font-bold py-3 px-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% payments.forEach(payment => { %>
+                <tr class="border-b border-purple-300 hover:bg-white hover:bg-opacity-10 transition">
+                  <td class="text-white py-3 px-4">
+                    <%= payment.student ? payment.student.name : 'Unknown' %>
+                  </td>
+                  <td class="text-white py-3 px-4">
+                    <%= new Date(2024, payment.month - 1).toLocaleString('default', { month: 'long' }) %>
+                  </td>
+                  <td class="text-white py-3 px-4"><%= payment.year %></td>
+                  <td class="text-white py-3 px-4">₹<%= payment.amount %></td>
+                  <td class="py-3 px-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold <%= payment.status === 'paid' ? 'bg-green-400 text-white' : 'bg-yellow-400 text-white' %>">
+                      <%= payment.status %>
+                    </span>
+                  </td>
+                  <td class="py-3 px-4">
+                    <% if (payment.status === 'unpaid') { %>
+                      <form method="POST" action="/admin/payments/<%= payment._id %>/mark-paid" class="inline">
+                        <button type="submit" class="bg-green-400 text-white px-3 py-1 rounded text-sm hover:bg-green-500 transition hover:scale-105 transform">
+                          <i class="fas fa-check mr-1"></i> Mark Paid
+                        </button>
+                      </form>
+                    <% } else { %>
+                      <span class="text-green-400 text-sm">
+                        <i class="fas fa-check-circle mr-1"></i> Paid
+                      </span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="glass-morphism rounded-xl p-8">
+        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+          <i class="fas fa-chart-line text-green-400"></i> Payment Statistics
+        </h3>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-purple-200">Total Revenue</span>
+            <span class="text-green-400 font-bold">₹<%= payments.reduce((sum, p) => sum + (p.status === 'paid' ? p.amount : 0), 0) %></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-purple-200">Pending Amount</span>
+            <span class="text-yellow-400 font-bold">₹<%= payments.reduce((sum, p) => sum + (p.status === 'unpaid' ? p.amount : 0), 0) %></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-purple-200">Total Students</span>
+            <span class="text-white font-bold"><%= payments.length %></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-morphism rounded-xl p-8">
+        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+          <i class="fas fa-bell text-orange-400"></i> Recent Activity
+        </h3>
+        <div class="space-y-3">
+          <% payments.slice(0, 5).forEach(payment => { %>
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                <i class="fas fa-<%= payment.status === 'paid' ? 'check-circle text-green-400' : 'clock text-yellow-400' %> text-sm"></i>
+              </div>
+              <div class="flex-1">
+                <p class="text-white text-sm"><%= payment.student ? payment.student.name : 'Unknown' %></p>
+                <p class="text-purple-200 text-xs"><%= payment.status === 'paid' ? 'Payment received' : 'Payment pending' %></p>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <div class="glass-morphism rounded-xl p-8">
+        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+          <i class="fas fa-cog text-purple-400"></i> Quick Actions
+        </h3>
+        <div class="space-y-3">
+          <button class="w-full bg-gradient-to-r from-blue-400 to-cyan-400 text-white px-4 py-2 rounded-lg hover:shadow-xl transition hover:scale-105 transform">
+            <i class="fas fa-download mr-2"></i> Export Report
+          </button>
+          <button class="w-full bg-gradient-to-r from-green-400 to-teal-400 text-white px-4 py-2 rounded-lg hover:shadow-xl transition hover:scale-105 transform">
+            <i class="fas fa-envelope mr-2"></i> Send Reminders
+          </button>
+          <button class="w-full bg-gradient-to-r from-purple-400 to-pink-400 text-white px-4 py-2 rounded-lg hover:shadow-xl transition hover:scale-105 transform">
+            <i class="fas fa-file-invoice mr-2"></i> Generate Invoice
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <%- include('../_footer') %>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Mess Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #2d1b1b;
+      background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)),
+        url('https://images.unsplash.com/photo-1497366216548-375f7030fcf0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      position: relative;
+      background-repeat: no-repeat;
+    }
+    .glass-morphism {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    }
+    .glass-morphism:hover {
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+      transform: translateY(-3px);
+    }
+    .admin-accent {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      transition: all 0.3s ease;
+    }
+    .admin-accent:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(239, 68, 68, 0.4);
+    }
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
+    }
+    .form-input {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      color: white;
+    }
+    .form-input:focus {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .stat-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .stat-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <%- include('../_header') %>
+  <main class="container mx-auto px-6 py-12">
+    <div class="mb-8">
+      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">System Settings</h1>
+      <p class="text-purple-200 text-lg">Configure system preferences and administrative settings</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2">
+        <div class="glass-morphism rounded-xl p-8">
+          <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-cogs text-orange-400"></i> General Settings
+          </h2>
+          
+          <form class="space-y-6">
+            <div>
+              <label class="block text-white font-bold mb-2" for="systemName">System Name</label>
+              <input type="text" id="systemName" class="form-input w-full px-4 py-3 rounded-lg" value="Mess Management System">
+            </div>
+            
+            <div>
+              <label class="block text-white font-bold mb-2" for="adminEmail">Admin Email</label>
+              <input type="email" id="adminEmail" class="form-input w-full px-4 py-3 rounded-lg" value="admin@messmanagement.com">
+            </div>
+            
+            <div>
+              <label class="block text-white font-bold mb-2" for="timezone">Timezone</label>
+              <select id="timezone" class="form-input w-full px-4 py-3 rounded-lg">
+                <option value="UTC">UTC</option>
+                <option value="IST">Indian Standard Time</option>
+                <option value="EST">Eastern Standard Time</option>
+                <option value="PST">Pacific Standard Time</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-white font-bold mb-2" for="currency">Default Currency</label>
+              <select id="currency" class="form-input w-full px-4 py-3 rounded-lg">
+                <option value="INR">Indian Rupee (₹)</option>
+                <option value="USD">US Dollar ($)</option>
+                <option value="EUR">Euro (€)</option>
+              </select>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <label class="block text-white font-bold" for="notifications">Email Notifications</label>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="notifications" class="sr-only peer" checked>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <label class="block text-white font-bold" for="maintenance">Maintenance Mode</label>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="maintenance" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            
+            <button type="submit" class="admin-accent w-full text-white px-6 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform">
+              <i class="fas fa-save mr-2"></i> Save Settings
+            </button>
+          </form>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-bell text-purple-400"></i> Notification Settings
+          </h3>
+          
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-4 bg-white bg-opacity-10 rounded-lg">
+              <div>
+                <p class="text-white font-bold">New User Registration</p>
+                <p class="text-purple-200 text-sm">Notify when new users register</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer" checked>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            
+            <div class="flex items-center justify-between p-4 bg-white bg-opacity-10 rounded-lg">
+              <div>
+                <p class="text-white font-bold">Payment Received</p>
+                <p class="text-purple-200 text-sm">Notify when payments are processed</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer" checked>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            
+            <div class="flex items-center justify-between p-4 bg-white bg-opacity-10 rounded-lg">
+              <div>
+                <p class="text-white font-bold">Complaint Filed</p>
+                <p class="text-purple-200 text-sm">Notify when complaints are filed</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="glass-morphism rounded-xl p-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-shield-alt text-green-400"></i> Security Settings
+          </h3>
+          <div class="space-y-4">
+            <div class="p-4 bg-white bg-opacity-10 rounded-lg">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-purple-200">Password Policy</span>
+                <span class="text-green-400 font-bold">Active</span>
+              </div>
+              <p class="text-white text-sm">Min 8 characters, uppercase, lowercase, numbers</p>
+            </div>
+            
+            <div class="p-4 bg-white bg-opacity-10 rounded-lg">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-purple-200">Session Timeout</span>
+                <span class="text-yellow-400 font-bold">30 min</span>
+              </div>
+              <p class="text-white text-sm">Auto logout after inactivity</p>
+            </div>
+            
+            <div class="p-4 bg-white bg-opacity-10 rounded-lg">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-purple-200">Two-Factor Auth</span>
+                <span class="text-red-400 font-bold">Disabled</span>
+              </div>
+              <p class="text-white text-sm">Enhanced security for admin accounts</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-database text-blue-400"></i> System Info
+          </h3>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-purple-200">Version</span>
+              <span class="text-white font-bold">v2.1.0</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-purple-200">Database</span>
+              <span class="text-white font-bold">MongoDB</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-purple-200">Last Backup</span>
+              <span class="text-white font-bold">2 hours ago</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-purple-200">Storage Used</span>
+              <span class="text-white font-bold">45%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-tools text-purple-400"></i> Quick Actions
+          </h3>
+          <div class="space-y-3">
+            <button class="w-full btn-success text-white px-4 py-2 rounded-lg hover:shadow-xl font-bold text-sm transition hover:scale-105 transform">
+              <i class="fas fa-download mr-2"></i> Backup Database
+            </button>
+            <button class="w-full admin-accent text-white px-4 py-2 rounded-lg hover:shadow-xl font-bold text-sm transition hover:scale-105 transform">
+              <i class="fas fa-sync mr-2"></i> Clear Cache
+            </button>
+            <button class="w-full bg-gradient-to-r from-orange-400 to-red-400 text-white px-4 py-2 rounded-lg hover:shadow-xl font-bold text-sm transition hover:scale-105 transform">
+              <i class="fas fa-trash mr-2"></i> Clean Logs
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <%- include('../_footer') %>
+</body>
+</html>

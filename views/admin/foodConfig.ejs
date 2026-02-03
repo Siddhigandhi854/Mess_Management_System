@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Mess Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #2d1b1b;
+      background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)),
+        url('https://images.unsplash.com/photo-1497366216548-375f7030fcf0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      position: relative;
+      background-repeat: no-repeat;
+    }
+    .glass-morphism {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+    .form-input {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      color: white;
+    }
+    .form-input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <%- include('../_header') %>
+  <main class="container mx-auto px-6 py-12">
+    <div class="mb-8">
+      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Food Configuration</h1>
+      <p class="text-purple-200 text-lg">Set per-student food quantity standards</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div>
+        <div class="glass-morphism rounded-xl p-8">
+          <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-sliders-h text-orange-400"></i> Configure Food Quantities
+          </h2>
+          
+          <form method="POST" action="/admin/food-config" class="space-y-6">
+            <div>
+              <label class="block text-white font-bold mb-2" for="ricePerStudentKg">
+                <i class="fas fa-bowl-rice mr-2"></i>Rice per Student (kg)
+              </label>
+              <input type="number" id="ricePerStudentKg" name="ricePerStudentKg" 
+                     value="<%= config ? config.ricePerStudentKg : '' %>" 
+                     step="0.1" min="0" max="5"
+                     class="form-input w-full px-4 py-3 rounded-lg" required>
+            </div>
+
+            <div>
+              <label class="block text-white font-bold mb-2" for="dalPerStudentL">
+                <i class="fas fa-mortar-pestle mr-2"></i>Dal per Student (liters)
+              </label>
+              <input type="number" id="dalPerStudentL" name="dalPerStudentL" 
+                     value="<%= config ? config.dalPerStudentL : '' %>" 
+                     step="0.1" min="0" max="2"
+                     class="form-input w-full px-4 py-3 rounded-lg" required>
+            </div>
+
+            <div>
+              <label class="block text-white font-bold mb-2" for="sabjiPerStudentKg">
+                <i class="fas fa-carrot mr-2"></i>Vegetables per Student (kg)
+              </label>
+              <input type="number" id="sabjiPerStudentKg" name="sabjiPerStudentKg" 
+                     value="<%= config ? config.sabjiPerStudentKg : '' %>" 
+                     step="0.1" min="0" max="3"
+                     class="form-input w-full px-4 py-3 rounded-lg" required>
+            </div>
+
+            <div>
+              <label class="block text-white font-bold mb-2" for="rotiPerStudentCount">
+                <i class="fas fa-bread-slice mr-2"></i>Roti per Student (count)
+              </label>
+              <input type="number" id="rotiPerStudentCount" name="rotiPerStudentCount" 
+                     value="<%= config ? config.rotiPerStudentCount : '' %>" 
+                     min="0" max="10"
+                     class="form-input w-full px-4 py-3 rounded-lg" required>
+            </div>
+
+            <button type="submit" class="btn-primary w-full text-white px-6 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform">
+              <i class="fas fa-save mr-2"></i> Save Configuration
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div>
+        <div class="glass-morphism rounded-xl p-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-info-circle text-blue-400"></i> Current Configuration
+          </h3>
+          
+          <% if (config) { %>
+            <div class="space-y-4">
+              <div class="bg-white bg-opacity-10 rounded-lg p-4">
+                <h4 class="text-white font-bold mb-2">Rice</h4>
+                <p class="text-purple-200"><%= config.ricePerStudentKg %> kg per student</p>
+              </div>
+              
+              <div class="bg-white bg-opacity-10 rounded-lg p-4">
+                <h4 class="text-white font-bold mb-2">Dal</h4>
+                <p class="text-purple-200"><%= config.dalPerStudentL %> liters per student</p>
+              </div>
+              
+              <div class="bg-white bg-opacity-10 rounded-lg p-4">
+                <h4 class="text-white font-bold mb-2">Vegetables</h4>
+                <p class="text-purple-200"><%= config.sabjiPerStudentKg %> kg per student</p>
+              </div>
+              
+              <div class="bg-white bg-opacity-10 rounded-lg p-4">
+                <h4 class="text-white font-bold mb-2">Roti</h4>
+                <p class="text-purple-200"><%= config.rotiPerStudentCount %> pieces per student</p>
+              </div>
+            </div>
+          <% } else { %>
+            <div class="text-center py-8">
+              <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-cog text-white text-2xl"></i>
+              </div>
+              <p class="text-purple-200">No configuration set yet</p>
+            </div>
+          <% } %>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-calculator text-green-400"></i> Daily Requirements
+          </h3>
+          
+          <% if (config) { %>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-purple-200">Assuming 50 students:</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-purple-200">Rice needed:</span>
+                <span class="text-white font-bold"><%= (config.ricePerStudentKg * 50).toFixed(1) %> kg</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-purple-200">Dal needed:</span>
+                <span class="text-white font-bold"><%= (config.dalPerStudentL * 50).toFixed(1) %> liters</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-purple-200">Vegetables needed:</span>
+                <span class="text-white font-bold"><%= (config.sabjiPerStudentKg * 50).toFixed(1) %> kg</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-purple-200">Roti needed:</span>
+                <span class="text-white font-bold"><%= config.rotiPerStudentCount * 50 %> pieces</span>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-morphism rounded-xl p-8 mt-8">
+      <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+        <i class="fas fa-lightbulb text-yellow-400"></i> Guidelines
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white bg-opacity-10 rounded-lg p-4">
+          <h4 class="text-white font-bold mb-2">Nutritional Balance</h4>
+          <p class="text-purple-200 text-sm">Ensure balanced proportions of carbohydrates, proteins, and vegetables</p>
+        </div>
+        
+        <div class="bg-white bg-opacity-10 rounded-lg p-4">
+          <h4 class="text-white font-bold mb-2">Waste Reduction</h4>
+          <p class="text-purple-200 text-sm">Optimize quantities to minimize food waste while meeting nutritional needs</p>
+        </div>
+        
+        <div class="bg-white bg-opacity-10 rounded-lg p-4">
+          <h4 class="text-white font-bold mb-2">Regular Review</h4>
+          <p class="text-purple-200 text-sm">Review and adjust configurations based on student feedback and consumption patterns</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <%- include('../_footer') %>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Mess Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1512058564366-18560ea541a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+    .glass-morphism {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+    .form-input {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      color: white;
+    }
+    .form-input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <%- include('../_header') %>
+  <main class="container mx-auto px-6 py-12">
+    <div class="mb-8">
+      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Daily Attendance</h1>
+      <p class="text-purple-200 text-lg">Track student attendance for meal planning</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2">
+        <div class="glass-morphism rounded-xl p-8">
+          <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-users text-green-400"></i> Attendance Count
+          </h2>
+          
+          <div class="mb-6">
+            <label class="block text-white font-bold mb-2" for="date">
+              <i class="fas fa-calendar mr-2"></i>Select Date
+            </label>
+            <form method="GET" class="flex gap-4">
+              <input type="date" id="date" name="date" 
+                     value="<%= date.toISOString().split('T')[0] %>"
+                     class="form-input px-4 py-3 rounded-lg">
+              <button type="submit" class="btn-primary text-white px-6 py-3 rounded-lg hover:shadow-xl transition hover:scale-105 transform">
+                <i class="fas fa-search mr-2"></i> View
+              </button>
+            </form>
+          </div>
+
+          <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-lg p-8 text-center">
+            <div class="text-6xl font-bold text-white mb-2"><%= count %></div>
+            <div class="text-white text-lg">Students Eating Today</div>
+            <div class="text-blue-100 text-sm mt-2"><%= date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            <div class="bg-white bg-opacity-10 rounded-lg p-4 text-center">
+              <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <i class="fas fa-chart-line text-green-400"></i>
+              </div>
+              <h3 class="text-white font-bold">Trend Analysis</h3>
+              <p class="text-purple-200 text-sm">View attendance patterns</p>
+            </div>
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-4 text-center">
+              <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <i class="fas fa-calculator text-orange-400"></i>
+              </div>
+              <h3 class="text-white font-bold">Food Calculator</h3>
+              <p class="text-purple-200 text-sm">Calculate quantities needed</p>
+            </div>
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-4 text-center">
+              <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <i class="fas fa-download text-purple-400"></i>
+              </div>
+              <h3 class="text-white font-bold">Export Data</h3>
+              <p class="text-purple-200 text-sm">Download attendance reports</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="glass-morphism rounded-xl p-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-info-circle text-blue-400"></i> Attendance Insights
+          </h3>
+          <div class="space-y-4">
+            <div class="bg-white bg-opacity-10 rounded-lg p-4">
+              <h4 class="text-white font-bold mb-2">Peak Hours</h4>
+              <p class="text-purple-200 text-sm">Most students eat between 12-2 PM and 7-9 PM</p>
+            </div>
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-4">
+              <h4 class="text-white font-bold mb-2">Average Attendance</h4>
+              <p class="text-purple-200 text-sm">Usually 85-90% of total students</p>
+            </div>
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-4">
+              <h4 class="text-white font-bold mb-2">Planning Tips</h4>
+              <p class="text-purple-200 text-sm">Use attendance data for accurate meal preparation</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-bell text-orange-400"></i> Quick Actions
+          </h3>
+          <div class="space-y-3">
+            <a href="/mess/food-calculator?date=<%= date.toISOString().split('T')[0] %>" 
+               class="block bg-gradient-to-r from-green-400 to-teal-400 text-white px-4 py-2 rounded-lg hover:shadow-xl transition hover:scale-105 transform text-center">
+              <i class="fas fa-calculator mr-2"></i> Calculate Food Needed
+            </a>
+            <button class="block bg-gradient-to-r from-blue-400 to-cyan-400 text-white px-4 py-2 rounded-lg hover:shadow-xl transition hover:scale-105 transform">
+              <i class="fas fa-download mr-2"></i> Download Report
+            </button>
+            <button class="block bg-gradient-to-r from-purple-400 to-pink-400 text-white px-4 py-2 rounded-lg hover:shadow-xl transition hover:scale-105 transform">
+              <i class="fas fa-chart-bar mr-2"></i> View Statistics
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <%- include('../_footer') %>
+</body>
+</html>

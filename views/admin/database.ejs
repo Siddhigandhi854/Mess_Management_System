@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Mess Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #2d1b1b;
+      background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)),
+        url('https://images.unsplash.com/photo-1497366216548-375f7030fcf0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      position: relative;
+      background-repeat: no-repeat;
+    }
+    .glass-morphism {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    }
+    .glass-morphism:hover {
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+      transform: translateY(-3px);
+    }
+    .admin-accent {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      transition: all 0.3s ease;
+    }
+    .admin-accent:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(239, 68, 68, 0.4);
+    }
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(239, 68, 68, 0.4);
+    }
+    .form-input {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      color: white;
+    }
+    .form-input:focus {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .stat-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .stat-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <%- include('../_header') %>
+  <main class="container mx-auto px-6 py-12">
+    <div class="mb-8">
+      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Database Management</h1>
+      <p class="text-purple-200 text-lg">Manage database operations, backups, and system maintenance</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2">
+        <div class="glass-morphism rounded-xl p-8">
+          <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-database text-blue-400"></i> Database Operations
+          </h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="stat-card rounded-lg p-6 hover-lift">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-teal-400 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-download text-white text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-white font-bold">Backup Database</h3>
+                  <p class="text-purple-200 text-sm">Create full backup</p>
+                </div>
+              </div>
+              <button class="btn-success w-full text-white px-4 py-2 rounded-lg hover:shadow-xl font-bold text-sm transition hover:scale-105 transform mt-4">
+                <i class="fas fa-download mr-2"></i> Backup Now
+              </button>
+            </div>
+
+            <div class="stat-card rounded-lg p-6 hover-lift">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-upload text-white text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-white font-bold">Restore Database</h3>
+                  <p class="text-purple-200 text-sm">Restore from backup</p>
+                </div>
+              </div>
+              <button class="admin-accent w-full text-white px-4 py-2 rounded-lg hover:shadow-xl font-bold text-sm transition hover:scale-105 transform mt-4">
+                <i class="fas fa-upload mr-2"></i> Restore
+              </button>
+            </div>
+
+            <div class="stat-card rounded-lg p-6 hover-lift">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-sync text-white text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-white font-bold">Optimize Database</h3>
+                  <p class="text-purple-200 text-sm">Improve performance</p>
+                </div>
+              </div>
+              <button class="btn-success w-full text-white px-4 py-2 rounded-lg hover:shadow-xl font-bold text-sm transition hover:scale-105 transform mt-4">
+                <i class="fas fa-sync mr-2"></i> Optimize
+              </button>
+            </div>
+
+            <div class="stat-card rounded-lg p-6 hover-lift">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-400 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-trash text-white text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-white font-bold">Clean Database</h3>
+                  <p class="text-purple-200 text-sm">Remove old data</p>
+                </div>
+              </div>
+              <button class="btn-danger w-full text-white px-4 py-2 rounded-lg hover:shadow-xl font-bold text-sm transition hover:scale-105 transform mt-4">
+                <i class="fas fa-trash mr-2"></i> Clean
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-history text-orange-400"></i> Backup History
+          </h3>
+          
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-4 bg-white bg-opacity-10 rounded-lg">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-green-400 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-file-archive text-white text-xs"></i>
+                </div>
+                <div>
+                  <p class="text-white text-sm font-bold">Full Backup</p>
+                  <p class="text-purple-200 text-xs">2024-01-31 23:45:00 • 45.2 MB</p>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn-success text-white px-3 py-1 rounded text-xs">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="admin-accent text-white px-3 py-1 rounded text-xs">
+                  <i class="fas fa-undo"></i>
+                </button>
+                <button class="btn-danger text-white px-3 py-1 rounded text-xs">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="flex items-center justify-between p-4 bg-white bg-opacity-10 rounded-lg">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-file-archive text-white text-xs"></i>
+                </div>
+                <div>
+                  <p class="text-white text-sm font-bold">Incremental Backup</p>
+                  <p class="text-purple-200 text-xs">2024-01-30 15:30:00 • 12.8 MB</p>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn-success text-white px-3 py-1 rounded text-xs">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="admin-accent text-white px-3 py-1 rounded text-xs">
+                  <i class="fas fa-undo"></i>
+                </button>
+                <button class="btn-danger text-white px-3 py-1 rounded text-xs">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="flex items-center justify-between p-4 bg-white bg-opacity-10 rounded-lg">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-purple-400 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-file-archive text-white text-xs"></i>
+                </div>
+                <div>
+                  <p class="text-white text-sm font-bold">Auto Backup</p>
+                  <p class="text-purple-200 text-xs">2024-01-29 00:00:00 • 38.5 MB</p>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn-success text-white px-3 py-1 rounded text-xs">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="admin-accent text-white px-3 py-1 rounded text-xs">
+                  <i class="fas fa-undo"></i>
+                </button>
+                <button class="btn-danger text-white px-3 py-1 rounded text-xs">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="glass-morphism rounded-xl p-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-chart-pie text-green-400"></i> Database Statistics
+          </h3>
+          <div class="space-y-4">
+            <div class="stat-card rounded-lg p-4">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-purple-200">Total Size</span>
+                <span class="text-white font-bold">245.8 MB</span>
+              </div>
+              <div class="w-full bg-purple-200 rounded-full h-2">
+                <div class="bg-blue-400 h-2 rounded-full" style="width: 65%"></div>
+              </div>
+            </div>
+            
+            <div class="stat-card rounded-lg p-4">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-purple-200">Collections</span>
+                <span class="text-white font-bold">8</span>
+              </div>
+              <div class="w-full bg-purple-200 rounded-full h-2">
+                <div class="bg-green-400 h-2 rounded-full" style="width: 40%"></div>
+              </div>
+            </div>
+            
+            <div class="stat-card rounded-lg p-4">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-purple-200">Documents</span>
+                <span class="text-white font-bold">1,247</span>
+              </div>
+              <div class="w-full bg-purple-200 rounded-full h-2">
+                <div class="bg-orange-400 h-2 rounded-full" style="width: 85%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-cog text-purple-400"></i> Maintenance Tasks
+          </h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between p-3 bg-white bg-opacity-10 rounded-lg">
+              <span class="text-white text-sm">Last Cleanup</span>
+              <span class="text-green-400 text-xs">2 days ago</span>
+            </div>
+            
+            <div class="flex items-center justify-between p-3 bg-white bg-opacity-10 rounded-lg">
+              <span class="text-white text-sm">Last Optimization</span>
+              <span class="text-yellow-400 text-xs">1 week ago</span>
+            </div>
+            
+            <div class="flex items-center justify-between p-3 bg-white bg-opacity-10 rounded-lg">
+              <span class="text-white text-sm">Last Backup</span>
+              <span class="text-blue-400 text-xs">2 hours ago</span>
+            </div>
+            
+            <button class="w-full admin-accent text-white px-4 py-2 rounded-lg hover:shadow-xl font-bold text-sm transition hover:scale-105 transform mt-4">
+              <i class="fas fa-tools mr-2"></i> Run Maintenance
+            </button>
+          </div>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-shield-alt text-red-400"></i> Security Status
+          </h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between p-3 bg-white bg-opacity-10 rounded-lg">
+              <span class="text-white text-sm">Database Encryption</span>
+              <span class="text-green-400 text-xs">Enabled</span>
+            </div>
+            
+            <div class="flex items-center justify-between p-3 bg-white bg-opacity-10 rounded-lg">
+              <span class="text-white text-sm">Access Control</span>
+              <span class="text-green-400 text-xs">Active</span>
+            </div>
+            
+            <div class="flex items-center justify-between p-3 bg-white bg-opacity-10 rounded-lg">
+              <span class="text-white text-sm">Backup Encryption</span>
+              <span class="text-green-400 text-xs">Enabled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <%- include('../_footer') %>
+</body>
+</html>

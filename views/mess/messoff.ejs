@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Mess Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+    .glass-morphism {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    .glass-morphism:hover {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+    }
+    .form-input {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      color: white;
+    }
+    .form-input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .stat-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    .hover-lift {
+      transition: all 0.3s ease;
+    }
+    .hover-lift:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <%- include('../_header') %>
+  <main class="container mx-auto px-6 py-12">
+    <div class="mb-8">
+      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Mess Off Management</h1>
+      <p class="text-purple-200 text-lg">Approve or reject mess leave requests</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2">
+        <div class="glass-morphism rounded-xl p-8">
+          <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-calendar-times text-orange-400"></i> Mess Off Requests
+          </h2>
+          
+          <% if (upcomingMessOffs.length === 0) { %>
+            <div class="text-center py-12">
+              <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-calendar-times text-white text-2xl"></i>
+              </div>
+              <p class="text-purple-200 text-lg">No mess off requests found</p>
+            </div>
+          <% } else { %>
+            <div class="space-y-4">
+              <% upcomingMessOffs.forEach(messOff => { %>
+                <div class="bg-white bg-opacity-10 rounded-lg p-6 hover:scale-105 transform transition-all duration-300">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <h4 class="text-white font-bold text-lg">
+                        <%= new Date(messOff.startDate).toLocaleDateString() %> - <%= new Date(messOff.endDate).toLocaleDateString() %>
+                      </h4>
+                      <p class="text-purple-200 text-sm">Applied by <%= messOff.student ? messOff.student.name : 'Unknown' %></p>
+                    </div>
+                    <span class="text-xs px-3 py-1 rounded-full <%= messOff.status === 'approved' ? 'bg-green-400 text-white' : messOff.status === 'rejected' ? 'bg-red-400 text-white' : 'bg-yellow-400 text-white' %>">
+                      <%= messOff.status || 'pending' %>
+                    </span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-purple-200 text-sm">
+                      Duration: <%= Math.ceil((new Date(messOff.endDate) - new Date(messOff.startDate)) / (1000 * 60 * 60 * 24)) + 1 %> days
+                    </span>
+                    <span class="text-purple-300 text-xs">Applied on: <%= new Date(messOff.createdAt).toLocaleDateString() %></span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-purple-200 text-sm">
+                      <% if (messOff.status === 'approved') { %>
+                        Approved by <%= messOff.approvedBy ? messOff.approvedBy.name : 'Unknown' %>
+                      <% } else if (messOff.status === 'rejected') { %>
+                        Rejected by <%= messOff.rejectedBy ? messOff.rejectedBy.name : 'Unknown' %>
+                      <% } else { %>
+                        Pending approval
+                      <% } %>
+                    </span>
+                    <form method="POST" action="/mess/messoff/<%= messOff._id %>/approve" class="inline">
+                      <% if (messOff.status === 'pending') { %>
+                        <button type="submit" class="btn-success text-white px-3 py-1 rounded text-sm hover:bg-green-500 transition hover:scale-105 transform">
+                          <i class="fas fa-check mr-1"></i> Approve
+                        </button>
+                      <% } else if (messOff.status === 'rejected') { %>
+                        <button type="submit" class="btn-danger text-white px-3 py-1 rounded text-sm hover:bg-red-500 transition hover:scale-105 transform">
+                          <i class="fas fa-times mr-1"></i> Reject
+                        </button>
+                      <% } else { %>
+                        <button class="btn-primary text-white px-3 py-1 rounded text-sm hover:scale-105 transform">
+                          <i class="fas fa-eye mr-1"></i> View
+                        </button>
+                      <% } %>
+                    </form>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fa-plus-circle text-green-400"></i> Apply for Mess Off
+          </h3>
+          
+          <form method="POST" action="/mess/messoff" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-white font-bold mb-2" for="startDate">
+                  <i class="fas fa-calendar-alt mr-2"></i>Start Date
+                </label>
+                <input type="date" id="startDate" name="startDate" 
+                       class="form-input w-full px-4 py-3 rounded-lg" required>
+              </div>
+              
+              <div>
+                <label class="block text-white font-bold mb-2" for="endDate">
+                  <i class="fas fa-calendar-check mr-2"></i>End Date
+                </label>
+                <input type="date" id="endDate" name="endDate" 
+                       class="form-input w-full px-4 py-3 rounded-lg" required>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary w-full text-white px-6 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform">
+              <i class="fas fa-paper-plane mr-2"></i> Submit Application
+            </button>
+          </form>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-info-circle text-blue-400"></i> Mess Off Policy
+          </h3>
+          <div class="space-y-4">
+            <div class="bg-white bg-opacity-10 rounded-lg p-4">
+              <h4 class="text-white font-bold mb-2">Advance Notice</h4>
+              <p class="text-purple-200 text-sm">Apply at least 24 hours in advance</p>
+            </div>
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-4">
+              <h4 class="text-white font-bold mb-2">Maximum Duration</h4>
+              <p class="text-purple-200 text-sm">Maximum 7 days per application</p>
+            </div>
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-4">
+              <h4 class="text-white font-bold mb-2">Refund Policy</h4>
+              <p class="text-purple-200 text-sm">Refunds processed within 5-7 working days</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-morphism rounded-xl p-8 mt-8">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-calculator text-green-400"></i> Cost Calculator
+          </h3>
+          <div class="space-y-4">
+            <div class="bg-white bg-opacity-10 rounded-lg p-4">
+              <h4 class="text-white font-bold mb-2">Daily Rate</h4>
+              <p class="text-purple-200 text-sm">₹120 per day</p>
+            </div>
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-4">
+              <h4 class="text-white font-bold mb-2">Weekly Rate</h4>
+              <p class="text-purple-200 text-sm">₹800 per week (Save ₹40)</p>
+            </div>
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-4">
+              <h4 class="text-white font-bold mb-2">Monthly Rate</h4>
+              <p class="text-purple-200 text-sm">₹3000 per month (Save ₹600)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="glass-morphism rounded-xl p-8">
+        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+          <i class="fas fa-chart-bar text-purple-400"></i> Request Statistics
+        </h3>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-purple-200">Total Requests</span>
+            <span class="text-white font-bold"><%= upcomingMessOffs.length %></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-purple-200">Pending</span>
+            <span class="text-yellow-400 font-bold"><%= upcomingMessOffs.filter(m => m.status === 'pending').length %></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-purple-200">Approved</span>
+            <span class="text-green-400 font-bold"><%= upcomingMessOffs.filter(m => m.status === 'approved').length %></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-morphism rounded-xl p-8 mt-8">
+        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+          <i class="fas fa-headset text-purple-400"></i> Quick Actions
+        </h3>
+        <div class="space-y-3">
+          <button class="w-full bg-gradient-to-r from-blue-400 to-cyan-400 text-white px-4 py-2 rounded-lg hover:shadow-xl transition hover:scale-105 transform">
+            <i class="fas fa-download mr-2"></i> Export Report
+          </button>
+          <button class="w-full bg-gradient-to-r from-green-400 to-teal-400 text-white px-4 py-2 rounded-lg hover:shadow-xl transition hover:scale-105 transform">
+            <i class="fas fa-envelope mr-2"></i> Send Notifications
+          </button>
+          <button class="w-full bg-gradient-to-r from-purple-400 to-pink-400 text-white px-4 py-2 rounded-lg hover:shadow-xl transition hover:scale-105 transform">
+            <i class="fas fa-file-invoice mr-2"></i> Generate Invoice
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <%- include('../_footer') %>
+</body>
+</html>
