@@ -244,7 +244,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-purple-200 font-semibold">Monthly Revenue</p>
-            <p class="text-3xl font-bold text-green-300 mt-2">₹2.3L</p>
+            <p class="text-3xl font-bold text-green-300 mt-2">₹<%= (unpaidCount * 3000).toLocaleString() %></p>
           </div>
           <div class="w-14 h-14 bg-green-400 rounded-full flex items-center justify-center animate-pulse">
             <i class="fas fa-chart-line text-white text-2xl"></i>
@@ -313,7 +313,7 @@
               </div>
               <div>
                 <p class="font-bold text-white">Payment Processed</p>
-                <p class="text-purple-200">₹5,000 received from Raj Kumar - Jan 31, 1:45 PM</p>
+                <p class="text-purple-200">₹<%= (unpaidCount * 3000).toLocaleString() %> pending collection from <%= unpaidCount %> students</p>
               </div>
             </div>
             <div class="flex items-start gap-4 pb-4 border-b border-purple-300">
@@ -337,13 +337,13 @@
           <div class="space-y-4">
             <div class="bg-gradient-to-r from-green-400 to-emerald-400 rounded-lg p-4 hover:scale-105 transform transition-all duration-300">
               <p class="text-sm text-white">This Month</p>
-              <p class="text-2xl font-bold text-white mt-1">₹2,30,000</p>
-              <p class="text-xs text-white mt-2"><i class="fas fa-arrow-up"></i> +12% from last month</p>
+              <p class="text-2xl font-bold text-white mt-1">₹<%= ((students - unpaidCount) * 3000).toLocaleString() %></p>
+              <p class="text-xs text-white mt-2"><i class="fas fa-check"></i> <%= students - unpaidCount %> students paid</p>
             </div>
             <div class="bg-gradient-to-r from-orange-400 to-yellow-400 rounded-lg p-4 hover:scale-105 transform transition-all duration-300">
               <p class="text-sm text-white">Pending Collection</p>
-              <p class="text-2xl font-bold text-white mt-1">₹45,000</p>
-              <p class="text-xs text-white mt-2"><i class="fas fa-clock"></i> From 12 students</p>
+              <p class="text-2xl font-bold text-white mt-1">₹<%= (unpaidCount * 3000).toLocaleString() %></p>
+              <p class="text-xs text-white mt-2"><i class="fas fa-clock"></i> From <%= unpaidCount %> students</p>
             </div>
           </div>
         </div>
