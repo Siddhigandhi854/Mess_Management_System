@@ -8,6 +8,17 @@
         <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">MessHub</h1>
       </div>
       <nav class="flex gap-8 items-center">
+        <!-- Language Dropdown -->
+        <div class="relative">
+          <select id="languageSelect" class="bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-white/50 appearance-none cursor-pointer hover:bg-white/30 transition">
+            <option value="en" class="bg-purple-600">English</option>
+            <option value="mr" class="bg-purple-600">मराठी (Marathi)</option>
+          </select>
+          <div class="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
+            <i class="fas fa-chevron-down text-white text-xs"></i>
+          </div>
+        </div>
+        
         <% if (!currentUser) { %>
           <a href="/" class="hover:text-purple-200 transition font-medium hover:scale-105 transform">Home</a>
           <a href="/auth/login" class="hover:text-purple-200 transition font-medium hover:scale-105 transform">Login</a>
@@ -37,3 +48,25 @@
     </div>
   </div>
 </header>
+
+<script>
+// Language selection functionality
+document.getElementById('languageSelect').addEventListener('change', function() {
+  const selectedLanguage = this.value;
+  
+  // Store language preference in localStorage
+  localStorage.setItem('selectedLanguage', selectedLanguage);
+  
+  // Reload page to apply language changes
+  // In a full implementation, this would trigger translation
+  location.reload();
+});
+
+// Set initial language from localStorage
+document.addEventListener('DOMContentLoaded', function() {
+  const savedLanguage = localStorage.getItem('selectedLanguage');
+  if (savedLanguage) {
+    document.getElementById('languageSelect').value = savedLanguage;
+  }
+});
+</script>

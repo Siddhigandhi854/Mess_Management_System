@@ -7,6 +7,95 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script>
+    // Translation system
+    const translations = {
+      en: {
+        complaintManagement: "Complaint Management",
+        handleComplaints: "Handle and resolve student complaints efficiently",
+        attendance: "Attendance",
+        complaints: "Complaints", 
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        settings: "Settings",
+        totalComplaints: "Total Complaints",
+        pendingComplaints: "Pending Complaints",
+        resolvedComplaints: "Resolved Complaints",
+        complaintHistory: "Complaint History",
+        studentName: "Student Name",
+        complaintType: "Complaint Type",
+        description: "Description",
+        date: "Date",
+        status: "Status",
+        pending: "Pending",
+        resolved: "Resolved",
+        foodQuality: "Food Quality",
+        service: "Service",
+        cleanliness: "Cleanliness",
+        other: "Other",
+        resolve: "Resolve",
+        viewDetails: "View Details"
+      },
+      mr: {
+        complaintManagement: "तक्रार व्यवस्थापन",
+        handleComplaints: "विद्यार्थी तक्रार कार्यक्षमतेने हाताळा आणि सोडवा",
+        attendance: "उपस्थिती",
+        complaints: "तक्राव",
+        payments: "रक्कमे", 
+        menu: "मेनू",
+        messOff: "मेस बंद",
+        settings: "सेटिंग्ज",
+        totalComplaints: "एकूण तक्रार",
+        pendingComplaints: "प्रलंबित तक्रार",
+        resolvedComplaints: "सोडवलेले तक्रार",
+        complaintHistory: "तक्रार इतिहास",
+        studentName: "विद्यार्थीचे नाव",
+        complaintType: "तक्रार प्रकार",
+        description: "वर्णन",
+        date: "तारीख",
+        status: "स्थिती",
+        pending: "प्रलंबित",
+        resolved: "सोडवले",
+        foodQuality: "अन्न गुणवत्ता",
+        service: "सेवा",
+        cleanliness: "स्वच्छता",
+        other: "इतर",
+        resolve: "सोडवा",
+        viewDetails: "तपशील पहा"
+      }
+    };
+
+    function updatePageLanguage() {
+      const lang = localStorage.getItem('selectedLanguage') || 'en';
+      
+      // Update all translatable elements
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+    }
+
+    // Language selection functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.addEventListener('change', function() {
+          const selectedLanguage = this.value;
+          localStorage.setItem('selectedLanguage', selectedLanguage);
+          updatePageLanguage();
+        });
+
+        // Set initial language
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        if (savedLanguage) {
+          languageSelect.value = savedLanguage;
+        }
+        updatePageLanguage();
+      }
+    });
+
     tailwind.config = {
       theme: {
         extend: {
@@ -109,9 +198,16 @@
   <%- include('../_header') %>
   <main class="container mx-auto px-6 py-12">
     <div class="mb-8">
-      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Complaint Management</h1>
-      <p class="text-purple-200 text-lg">Handle and resolve student complaints efficiently</p>
-    </div>
+      <div class="flex items-center gap-6 mb-6">
+        <div class="flex-1">
+          <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow" data-translate="complaintManagement">Complaint Management</h1>
+          <p class="text-purple-200 text-lg" data-translate="handleComplaints">Handle and resolve student complaints efficiently</p>
+        </div>
+        <div class="relative">
+          <img src="https://picsum.photos/seed/complaint-support/200/200.jpg" alt="Complaint Management" class="w-32 h-32 rounded-xl object-cover shadow-2xl border-4 border-red-400" onerror="this.src='https://picsum.photos/seed/support/200/200.jpg'">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+        </div>
+      </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div class="lg:col-span-2">

@@ -7,6 +7,144 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script>
+    // Translation system
+    const translations = {
+      en: {
+        manageMenu: "Manage Menu",
+        createWeeklyMeal: "Create and manage weekly meal plans",
+        menu: "Menu",
+        attendance: "Attendance",
+        complaints: "Complaints", 
+        payments: "Payments",
+        messOff: "Mess Off",
+        settings: "Settings",
+        breakfast: "Breakfast",
+        lunch: "Lunch",
+        dinner: "Dinner",
+        addMenuItem: "Add Menu Item",
+        day: "Day",
+        weekday: "Weekday",
+        selectWeekday: "Select Weekday",
+        monday: "Monday",
+        tuesday: "Tuesday",
+        wednesday: "Wednesday",
+        thursday: "Thursday",
+        friday: "Friday",
+        saturday: "Saturday",
+        sunday: "Sunday",
+        mealType: "Meal Type",
+        selectMealType: "Select Meal Type",
+        breakfastItem: "Breakfast Item",
+        lunchItem: "Lunch Item", 
+        dinnerItem: "Dinner Item",
+        save: "Save",
+        cancel: "Cancel",
+        edit: "Edit",
+        delete: "Delete",
+        currentMenuItems: "Current Menu Items",
+        noMenuItems: "No menu items added yet",
+        menuItems: "Menu Items",
+        menuItemsPlaceholder: "Enter items separated by commas (e.g., Rice, Dal, Roti, Sabzi)",
+        separateItems: "Separate multiple items with commas",
+        customDate: "Custom Date",
+        edit: "Edit",
+        delete: "Delete",
+        nutritionalBalance: "Nutritional Balance",
+        includeProteins: "Include proteins, carbs, and vegetables in each meal",
+        varietyIsKey: "Variety is Key",
+        changeMenuWeekly: "Change menu items weekly to keep students interested",
+        studentPreferences: "Student Preferences",
+        considerFeedback: "Consider student feedback when planning meals",
+        mealSchedule: "Meal Schedule"
+      },
+      mr: {
+        manageMenu: "मेनू व्यवस्थापन करा",
+        createWeeklyMeal: "साप्ताहिक जेवणाची योजना तयार करा आणि व्यवस्थापन करा",
+        menu: "मेनू",
+        attendance: "उपस्थिती",
+        complaints: "तक्राव",
+        payments: "रक्कमे", 
+        messOff: "मेस बंद",
+        settings: "सेटिंग्ज",
+        breakfast: "नाश्ता",
+        lunch: "दुपारचे जेवण",
+        dinner: "रात्रीचे जेवण",
+        addMenuItem: "मेनू आयटम जोडा",
+        day: "दिवस",
+        weekday: "सप्ताह",
+        selectWeekday: "सप्ताह निवडा",
+        monday: "सोमवार",
+        tuesday: "मंगळवार",
+        wednesday: "बुधवार",
+        thursday: "गुरुवार",
+        friday: "शुक्रवार",
+        saturday: "शनिवार",
+        sunday: "रविवार",
+        mealType: "जेवणाचा प्रकार",
+        selectMealType: "जेवणाचा प्रकार निवडा",
+        breakfastItem: "नाश्त्याची वस्तू",
+        lunchItem: "दुपारच्या जेवणाची वस्तू",
+        dinnerItem: "रात्रीच्या जेवणाची वस्तू",
+        save: "जतन करा",
+        cancel: "रद्द करा",
+        edit: "संपादित करा",
+        delete: "हटवा",
+        menuPlanningTips: "मेनू नियोजन टिप्स",
+        currentMenuItems: "वर्तमान मेनू आयटम्स",
+        noMenuItems: "अजून कोणतेही मेनू आयटम जोडले नाही",
+        menuItems: "मेनू आयटम्स",
+        menuItemsPlaceholder: "आयटम्स कॉम्मा सह अलग करा (उदा. भात, डाळ, रोटी, सब्जी)",
+        separateItems: "एकाधिक आयटम्स कॉम्मा सह अलग करा",
+        customDate: "सानुकूल तारीख",
+        edit: "संपादित करा",
+        delete: "हटवा",
+        nutritionalBalance: "पौष्टिक संतुलन",
+        includeProteins: "प्रत्येक जेवणात प्रथिने, कार्बोहायड्रेट्स आणि भाज्यांचा समावेश करा",
+        varietyIsKey: "विविधता महत्वाची आहे",
+        changeMenuWeekly: "विद्यार्थींना रसिक ठेवण्यासाठी साप्ताहिक मेनू आयटम बदला",
+        studentPreferences: "विद्यार्थींची प्राधान्य",
+        considerFeedback: "जेवण नियोजन करताना विद्यार्थींचे अभिप्राय विचारात घ्या",
+        mealSchedule: "जेवणाचे वेळापत्रक"
+      }
+    };
+
+    function updatePageLanguage() {
+      const lang = localStorage.getItem('selectedLanguage') || 'en';
+      
+      // Update all translatable elements
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+
+      // Update placeholder for textarea
+      const textarea = document.getElementById('items');
+      if (textarea) {
+        textarea.placeholder = translations[lang].menuItemsPlaceholder;
+      }
+    }
+
+    // Language selection functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.addEventListener('change', function() {
+          const selectedLanguage = this.value;
+          localStorage.setItem('selectedLanguage', selectedLanguage);
+          updatePageLanguage();
+        });
+
+        // Set initial language
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        if (savedLanguage) {
+          languageSelect.value = savedLanguage;
+        }
+        updatePageLanguage();
+      }
+    });
+
     tailwind.config = {
       theme: {
         extend: {
@@ -32,7 +170,7 @@
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1512058564366-18560ea541a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://wallpaperaccess.com/full/4117465.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -64,26 +202,33 @@
     }
   </style>
 </head>
-<body>
+<body class="min-h-screen" style="background-image: url('https://wallpaperaccess.com/full/4117465.jpg'); background-size: cover; background-position: center; background-attachment: fixed;">
   <%- include('../_header') %>
   <main class="container mx-auto px-6 py-12">
     <div class="mb-8">
-      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Manage Menu</h1>
-      <p class="text-purple-200 text-lg">Create and manage weekly meal plans</p>
-    </div>
+      <div class="flex items-center gap-6 mb-6">
+        <div class="flex-1">
+          <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow" data-translate="manageMenu">Manage Menu</h1>
+          <p class="text-purple-200 text-lg" data-translate="createWeeklyMeal">Create and manage weekly meal plans</p>
+        </div>
+        <div class="relative">
+          <img src="https://picsum.photos/seed/meal-planning/200/200.jpg" alt="Menu Management" class="w-32 h-32 rounded-xl object-cover shadow-2xl border-4 border-orange-400" onerror="this.src='https://picsum.photos/seed/food-menu/200/200.jpg'">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+        </div>
+      </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div class="lg:col-span-2">
         <div class="glass-morphism rounded-xl p-8">
           <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-            <i class="fas fa-plus-circle text-green-400"></i> Add Menu Item
+            <i class="fas fa-plus-circle text-green-400"></i> <span data-translate="addMenuItem">Add Menu Item</span>
           </h2>
           
           <form method="POST" action="/mess/menu" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-white font-bold mb-2" for="date">
-                  <i class="fas fa-calendar mr-2"></i>Date
+                  <i class="fas fa-calendar mr-2"></i><span data-translate="day">Day</span>
                 </label>
                 <input type="date" id="date" name="date" 
                        class="form-input px-4 py-3 rounded-lg">
@@ -91,52 +236,51 @@
               
               <div>
                 <label class="block text-white font-bold mb-2" for="weekday">
-                  <i class="fas fa-calendar-day mr-2"></i>Weekday
+                  <i class="fas fa-calendar-day mr-2"></i><span data-translate="weekday">Weekday</span>
                 </label>
                 <select id="weekday" name="weekday" class="form-input px-4 py-3 rounded-lg">
-                  <option value="">Select Weekday</option>
-                  <option value="Monday">Monday</option>
-                  <option value="Tuesday">Tuesday</option>
-                  <option value="Wednesday">Wednesday</option>
-                  <option value="Thursday">Thursday</option>
-                  <option value="Friday">Friday</option>
-                  <option value="Saturday">Saturday</option>
-                  <option value="Sunday">Sunday</option>
+                  <option value="" data-translate="selectWeekday">Select Weekday</option>
+                  <option value="Monday" data-translate="monday">Monday</option>
+                  <option value="Tuesday" data-translate="tuesday">Tuesday</option>
+                  <option value="Wednesday" data-translate="wednesday">Wednesday</option>
+                  <option value="Thursday" data-translate="thursday">Thursday</option>
+                  <option value="Friday" data-translate="friday">Friday</option>
+                  <option value="Saturday" data-translate="saturday">Saturday</option>
+                  <option value="Sunday" data-translate="sunday">Sunday</option>
                 </select>
               </div>
             </div>
 
             <div>
               <label class="block text-white font-bold mb-2" for="mealType">
-                <i class="fas fa-utensils mr-2"></i>Meal Type
+                <i class="fas fa-utensils mr-2"></i><span data-translate="mealType">Meal Type</span>
               </label>
               <select id="mealType" name="mealType" class="form-input px-4 py-3 rounded-lg">
-                <option value="">Select Meal Type</option>
-                <option value="breakfast">Breakfast</option>
-                <option value="lunch">Lunch</option>
-                <option value="dinner">Dinner</option>
+                <option value="" data-translate="selectMealType">Select Meal Type</option>
+                <option value="Breakfast" data-translate="breakfast">Breakfast</option>
+                <option value="Lunch" data-translate="lunch">Lunch</option>
+                <option value="Dinner" data-translate="dinner">Dinner</option>
               </select>
             </div>
 
             <div>
               <label class="block text-white font-bold mb-2" for="items">
-                <i class="fas fa-list mr-2"></i>Menu Items
+                <i class="fas fa-list mr-2"></i><span data-translate="menuItems">Menu Items</span>
               </label>
               <textarea id="items" name="items" rows="3" 
-                        placeholder="Enter items separated by commas (e.g., Rice, Dal, Roti, Sabzi)"
                         class="form-input w-full px-4 py-3 rounded-lg resize-none" required></textarea>
-              <p class="text-purple-200 text-sm mt-2">Separate multiple items with commas</p>
+              <p class="text-purple-200 text-sm mt-2" data-translate="separateItems">Separate multiple items with commas</p>
             </div>
 
             <button type="submit" class="btn-primary w-full text-white px-6 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform">
-              <i class="fas fa-plus mr-2"></i> Add Menu Item
+              <i class="fas fa-plus mr-2"></i> <span data-translate="addMenuItem">Add Menu Item</span>
             </button>
           </form>
         </div>
 
         <div class="glass-morphism rounded-xl p-8 mt-8">
           <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-            <i class="fas fa-list text-blue-400"></i> Current Menu Items
+            <i class="fas fa-list text-blue-400"></i> <span data-translate="currentMenuItems">Current Menu Items</span>
           </h3>
           
           <% if (menus.length === 0) { %>
@@ -144,7 +288,7 @@
               <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-utensils text-white text-2xl"></i>
               </div>
-              <p class="text-purple-200 text-lg">No menu items added yet</p>
+              <p class="text-purple-200 text-lg" data-translate="noMenuItems">No menu items added yet</p>
             </div>
           <% } else { %>
             <div class="space-y-4">
@@ -181,41 +325,41 @@
       <div>
         <div class="glass-morphism rounded-xl p-8">
           <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
-            <i class="fas fa-star text-yellow-400"></i> Menu Planning Tips
+            <i class="fas fa-star text-yellow-400"></i> <span data-translate="menuPlanningTips">Menu Planning Tips</span>
           </h3>
           <div class="space-y-4">
             <div class="bg-white bg-opacity-10 rounded-lg p-4">
-              <h4 class="text-white font-bold mb-2">Nutritional Balance</h4>
-              <p class="text-purple-200 text-sm">Include proteins, carbs, and vegetables in each meal</p>
+              <h4 class="text-white font-bold mb-2" data-translate="nutritionalBalance">Nutritional Balance</h4>
+              <p class="text-purple-200 text-sm" data-translate="includeProteins">Include proteins, carbs, and vegetables in each meal</p>
             </div>
             
             <div class="bg-white bg-opacity-10 rounded-lg p-4">
-              <h4 class="text-white font-bold mb-2">Variety is Key</h4>
-              <p class="text-purple-200 text-sm">Change menu items weekly to keep students interested</p>
+              <h4 class="text-white font-bold mb-2" data-translate="varietyIsKey">Variety is Key</h4>
+              <p class="text-purple-200 text-sm" data-translate="changeMenuWeekly">Change menu items weekly to keep students interested</p>
             </div>
             
             <div class="bg-white bg-opacity-10 rounded-lg p-4">
-              <h4 class="text-white font-bold mb-2">Student Preferences</h4>
-              <p class="text-purple-200 text-sm">Consider student feedback when planning meals</p>
+              <h4 class="text-white font-bold mb-2" data-translate="studentPreferences">Student Preferences</h4>
+              <p class="text-purple-200 text-sm" data-translate="considerFeedback">Consider student feedback when planning meals</p>
             </div>
           </div>
         </div>
 
         <div class="glass-morphism rounded-xl p-8 mt-8">
           <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
-            <i class="fas fa-clock text-green-400"></i> Meal Schedule
+            <i class="fas fa-clock text-green-400"></i> <span data-translate="mealSchedule">Meal Schedule</span>
           </h3>
           <div class="space-y-3">
             <div class="flex justify-between items-center">
-              <span class="text-purple-200">Breakfast</span>
+              <span class="text-purple-200" data-translate="breakfast">Breakfast</span>
               <span class="text-white font-bold">7:00 AM - 9:00 AM</span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-purple-200">Lunch</span>
+              <span class="text-purple-200" data-translate="lunch">Lunch</span>
               <span class="text-white font-bold">12:00 PM - 2:00 PM</span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-purple-200">Dinner</span>
+              <span class="text-purple-200" data-translate="dinner">Dinner</span>
               <span class="text-white font-bold">7:00 PM - 9:00 PM</span>
             </div>
           </div>

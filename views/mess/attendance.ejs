@@ -7,6 +7,75 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script>
+    // Translation system
+    const translations = {
+      en: {
+        dailyAttendance: "Daily Attendance",
+        trackAttendance: "Track student attendance for meal planning",
+        attendance: "Attendance",
+        complaints: "Complaints", 
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        settings: "Settings",
+        markAttendance: "Mark Attendance",
+        studentName: "Student Name",
+        status: "Status",
+        present: "Present",
+        absent: "Absent",
+        save: "Save",
+        cancel: "Cancel"
+      },
+      mr: {
+        dailyAttendance: "दैनिक उपस्थिती",
+        trackAttendance: "जेवण योजनेसाठी विद्यार्थी उपस्थिती नक्का करा",
+        attendance: "उपस्थिती",
+        complaints: "तक्राव",
+        payments: "रक्कमे", 
+        menu: "मेनू",
+        messOff: "मेस बंद",
+        settings: "सेटिंग्ज",
+        markAttendance: "उपस्थिती नक्का करा",
+        studentName: "विद्यार्थीचे नाव",
+        status: "स्थिती",
+        present: "उपस्थित",
+        absent: "गैरहजर",
+        save: "जतन करा",
+        cancel: "रद्द करा"
+      }
+    };
+
+    function updatePageLanguage() {
+      const lang = localStorage.getItem('selectedLanguage') || 'en';
+      
+      // Update all translatable elements
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+    }
+
+    // Language selection functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.addEventListener('change', function() {
+          const selectedLanguage = this.value;
+          localStorage.setItem('selectedLanguage', selectedLanguage);
+          updatePageLanguage();
+        });
+
+        // Set initial language
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        if (savedLanguage) {
+          languageSelect.value = savedLanguage;
+        }
+        updatePageLanguage();
+      }
+    });
+
     tailwind.config = {
       theme: {
         extend: {
@@ -64,13 +133,20 @@
     }
   </style>
 </head>
-<body>
+<body class="min-h-screen" style="background-image: url('https://t4.ftcdn.net/jpg/02/92/20/37/360_F_292203735_CSsyqyS6A4Z9Czd4Msf7qZEhoxjpzZl1.jpg'); background-size: cover; background-position: center; background-attachment: fixed;">
   <%- include('../_header') %>
   <main class="container mx-auto px-6 py-12">
     <div class="mb-8">
-      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Daily Attendance</h1>
-      <p class="text-purple-200 text-lg">Track student attendance for meal planning</p>
-    </div>
+      <div class="flex items-center gap-6 mb-6">
+        <div class="flex-1">
+          <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow" data-translate="dailyAttendance">Daily Attendance</h1>
+          <p class="text-purple-200 text-lg" data-translate="trackAttendance">Track student attendance for meal planning</p>
+        </div>
+        <div class="relative">
+          <img src="https://picsum.photos/seed/attendance-tracking/200/200.jpg" alt="Attendance Management" class="w-32 h-32 rounded-xl object-cover shadow-2xl border-4 border-blue-400" onerror="this.src='https://picsum.photos/seed/students/200/200.jpg'">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+        </div>
+      </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div class="lg:col-span-2">

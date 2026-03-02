@@ -7,6 +7,99 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script>
+    // Translation system
+    const translations = {
+      en: {
+        messOffManagement: "Mess Off Management",
+        approveReject: "Approve or reject mess leave requests",
+        attendance: "Attendance",
+        complaints: "Complaints", 
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        settings: "Settings",
+        totalRequests: "Total Requests",
+        pendingRequests: "Pending Requests",
+        approvedRequests: "Approved Requests",
+        rejectedRequests: "Rejected Requests",
+        requestHistory: "Request History",
+        studentName: "Student Name",
+        leaveType: "Leave Type",
+        reason: "Reason",
+        date: "Date",
+        status: "Status",
+        pending: "Pending",
+        approved: "Approved",
+        rejected: "Rejected",
+        approve: "Approve",
+        reject: "Reject",
+        medical: "Medical",
+        personal: "Personal",
+        emergency: "Emergency",
+        other: "Other"
+      },
+      mr: {
+        messOffManagement: "मेस बंद व्यवस्थापन",
+        approveReject: "मेस सुट्टा विनंत्या मंजूर करा किंवा नकार द्या",
+        attendance: "उपस्थिती",
+        complaints: "तक्राव",
+        payments: "रक्कमे", 
+        menu: "मेनू",
+        messOff: "मेस बंद",
+        settings: "सेटिंग्ज",
+        totalRequests: "एकूण विनंत्या",
+        pendingRequests: "प्रलंबित विनंत्या",
+        approvedRequests: "मंजूर विनंत्या",
+        rejectedRequests: "नाकारलेल्या विनंत्या",
+        requestHistory: "विनंती इतिहास",
+        studentName: "विद्यार्थीचे नाव",
+        leaveType: "सुट्टी प्रकार",
+        reason: "कारण",
+        date: "तारीख",
+        status: "स्थिती",
+        pending: "प्रलंबित",
+        approved: "मंजूर",
+        rejected: "नाकारले",
+        approve: "मंजूर करा",
+        reject: "नकार द्या",
+        medical: "वैद्यकीय",
+        personal: "वैयक्तिक",
+        emergency: "आपत्कालीन",
+        other: "इतर"
+      }
+    };
+
+    function updatePageLanguage() {
+      const lang = localStorage.getItem('selectedLanguage') || 'en';
+      
+      // Update all translatable elements
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+    }
+
+    // Language selection functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.addEventListener('change', function() {
+          const selectedLanguage = this.value;
+          localStorage.setItem('selectedLanguage', selectedLanguage);
+          updatePageLanguage();
+        });
+
+        // Set initial language
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        if (savedLanguage) {
+          languageSelect.value = savedLanguage;
+        }
+        updatePageLanguage();
+      }
+    });
+
     tailwind.config = {
       theme: {
         extend: {
@@ -109,9 +202,16 @@
   <%- include('../_header') %>
   <main class="container mx-auto px-6 py-12">
     <div class="mb-8">
-      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Mess Off Management</h1>
-      <p class="text-purple-200 text-lg">Approve or reject mess leave requests</p>
-    </div>
+      <div class="flex items-center gap-6 mb-6">
+        <div class="flex-1">
+          <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Mess Off Management</h1>
+          <p class="text-purple-200 text-lg">Approve or reject mess leave requests</p>
+        </div>
+        <div class="relative">
+          <img src="https://picsum.photos/seed/mess-leave/200/200.jpg" alt="Mess Off Management" class="w-32 h-32 rounded-xl object-cover shadow-2xl border-4 border-purple-400" onerror="this.src='https://picsum.photos/seed/calendar/200/200.jpg'">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+        </div>
+      </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div class="lg:col-span-2">
