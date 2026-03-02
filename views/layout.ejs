@@ -7,6 +7,111 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script>
+    // Translation system - ONLY for language functionality, NO layout changes
+    const translations = {
+      en: {
+        welcome: "Welcome",
+        dashboard: "Dashboard",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        settings: "Settings",
+        login: "Login",
+        register: "Register",
+        logout: "Logout",
+        profile: "Profile",
+        home: "Home",
+        quickStats: "Quick Stats",
+        totalStudents: "Total Students",
+        todayAttendance: "Today's Attendance",
+        pendingPayments: "Pending Payments",
+        activeComplaints: "Active Complaints",
+        managementTools: "Management Tools",
+        todaysMenu: "Today's Menu",
+        breakfast: "Breakfast",
+        lunch: "Lunch",
+        dinner: "Dinner",
+        recentComplaints: "Recent Complaints",
+        noComplaints: "No complaints found",
+        markAttendance: "Mark Attendance",
+        viewMenu: "View Menu",
+        submitComplaint: "Submit Complaint",
+        makePayment: "Make Payment",
+        requestMessOff: "Request Mess Off",
+        studentDashboard: "Student Dashboard",
+        adminDashboard: "Admin Dashboard",
+        staffDashboard: "Staff Dashboard"
+      },
+      mr: {
+        welcome: "स्वागत",
+        dashboard: "डॅशबोर्ड",
+        attendance: "उपस्थिती",
+        complaints: "तक्राव",
+        payments: "रक्कमे",
+        menu: "मेनू",
+        messOff: "मेस बंद",
+        settings: "सेटिंग्ज",
+        login: "लॉगिन",
+        register: "नोंदणी करा",
+        logout: "लॉगआउट",
+        profile: "प्रोफाइल",
+        home: "होम",
+        quickStats: "जलद आकडेवारी",
+        totalStudents: "एकूण विद्यार्थी",
+        todayAttendance: "आजची उपस्थिती",
+        pendingPayments: "प्रलंबित रक्कमे",
+        activeComplaints: "सक्रिय तक्रार",
+        managementTools: "व्यवस्थापन साधने",
+        upcomingMenu: "आगामी मेनू",
+        breakfast: "नाश्ता",
+        lunch: "दुपारचे जेवण",
+        dinner: "रात्रीचे जेवण",
+        recentComplaints: "अलीकडील तक्रार",
+        noComplaints: "कोणतेही तक्रार सापडले नाही",
+        markAttendance: "उपस्थिती नक्का करा",
+        viewMenu: "मेनू पहा",
+        submitComplaint: "तक्रार सबमिट करा",
+        makePayment: "रक्कम करा",
+        requestMessOff: "मेस बंद विनंती करा",
+        studentDashboard: "विद्यार्थी डॅशबोर्ड",
+        adminDashboard: "अडमिन डॅशबोर्ड",
+        staffDashboard: "स्टाफ डॅशबोर्ड"
+      }
+    };
+
+    function updatePageLanguage() {
+      const lang = localStorage.getItem('selectedLanguage') || 'en';
+      
+      // Update all translatable elements
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+    }
+
+    // Language selection functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.addEventListener('change', function() {
+          const selectedLanguage = this.value;
+          localStorage.setItem('selectedLanguage', selectedLanguage);
+          updatePageLanguage();
+        });
+
+        // Set initial language
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        if (savedLanguage) {
+          languageSelect.value = savedLanguage;
+        }
+        updatePageLanguage();
+      }
+    });
+
     tailwind.config = {
       theme: {
         extend: {

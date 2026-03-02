@@ -7,6 +7,142 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script>
+    // Translation system - Complete Marathi translation
+    const translations = {
+      en: {
+        welcome: "Welcome",
+        dashboard: "Dashboard",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        settings: "Settings",
+        login: "Login",
+        register: "Register",
+        logout: "Logout",
+        profile: "Profile",
+        home: "Home",
+        quickStats: "Quick Stats",
+        totalStudents: "Total Students",
+        todayAttendance: "Today's Attendance",
+        pendingPayments: "Pending Payments",
+        activeComplaints: "Active Complaints",
+        managementTools: "Management Tools",
+        todaysMenu: "Today's Menu",
+        breakfast: "Breakfast",
+        lunch: "Lunch",
+        dinner: "Dinner",
+        recentComplaints: "Recent Complaints",
+        noComplaints: "No complaints found",
+        markAttendance: "Mark Attendance",
+        viewMenu: "View Menu",
+        submitComplaint: "Submit Complaint",
+        makePayment: "Make Payment",
+        requestMessOff: "Request Mess Off",
+        studentDashboard: "Student Dashboard",
+        adminDashboard: "Admin Dashboard",
+        staffDashboard: "Staff Dashboard",
+        foodCalculator: "Food Calculator",
+        dailyFoodRequirements: "Daily Food Requirements",
+        studentsPresent: "Students Present",
+        riceKg: "Rice (kg)",
+        wheatFlourKg: "Wheat Flour (kg)",
+        dalLiters: "Dal (liters)",
+        vegetablesKg: "Vegetables (kg)",
+        rotis: "Rotis",
+        perStudentBreakdown: "Per Student Breakdown",
+        totalStudents: "Total Students",
+        activeToday: "Active Today",
+        messOff: "Mess Off",
+        pendingBills: "Pending Bills",
+        quickStats: "Quick Stats"
+      },
+      mr: {
+        welcome: "स्वागत",
+        dashboard: "डॅशबोर्ड",
+        attendance: "उपस्थिती",
+        complaints: "तक्राव",
+        payments: "रक्कमे",
+        menu: "मेनू",
+        messOff: "मेस बंद",
+        settings: "सेटिंग्ज",
+        login: "लॉगिन",
+        register: "नोंदणी करा",
+        logout: "लॉगआउट",
+        profile: "प्रोफाइल",
+        home: "होम",
+        quickStats: "जलद आकडेवारी",
+        totalStudents: "एकूण विद्यार्थी",
+        todayAttendance: "आजची उपस्थिती",
+        pendingPayments: "प्रलंबित रक्कमे",
+        activeComplaints: "सक्रिय तक्रार",
+        managementTools: "व्यवस्थापन साधने",
+        todaysMenu: "आजचे मेनू",
+        breakfast: "नाश्ता",
+        lunch: "दुपारचे जेवण",
+        dinner: "रात्रीचे जेवण",
+        recentComplaints: "अलीकडील तक्रार",
+        noComplaints: "कोणतेही तक्रार सापडले नाही",
+        markAttendance: "उपस्थिती नक्का करा",
+        viewMenu: "मेनू पहा",
+        submitComplaint: "तक्रार सबमिट करा",
+        makePayment: "रक्कम करा",
+        requestMessOff: "मेस बंद विनंती करा",
+        studentDashboard: "विद्यार्थी डॅशबोर्ड",
+        adminDashboard: "अडमिन डॅशबोर्ड",
+        staffDashboard: "स्टाफ डॅशबोर्ड",
+        foodCalculator: "अन्न कॅल्क्युलेटर",
+        dailyFoodRequirements: "दैनिक अन्न आवश्यकता",
+        studentsPresent: "उपस्थित विद्यार्थी:",
+        riceKg: "तांदूळ (किलो)",
+        wheatFlourKg: "गहू चे पीठ (किलो)",
+        dalLiters: "डाळ (लिटर)",
+        vegetablesKg: "भाज्या (किलो)",
+        rotis: "रोटी",
+        perStudentBreakdown: "प्रति विद्यार्थी तपशील",
+        totalStudents: "एकूण विद्यार्थी",
+        activeToday: "आज सक्रिय",
+        messOffCount: "मेस बंद",
+        pendingBills: "प्रलंबित बिले",
+        quickStats: "जलद आकडेवारी"
+      }
+    };
+
+    function updatePageLanguage() {
+      const lang = localStorage.getItem('selectedLanguage') || 'en';
+      
+      // Update all translatable elements
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+    }
+
+    // Language selection functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.addEventListener('change', function() {
+          const selectedLanguage = this.value;
+          localStorage.setItem('selectedLanguage', selectedLanguage);
+          updatePageLanguage();
+        });
+
+        // Set initial language
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        if (savedLanguage) {
+          languageSelect.value = savedLanguage;
+        }
+        updatePageLanguage();
+      }
+      
+      // Also update language immediately in case header is loaded after
+      setTimeout(updatePageLanguage, 100);
+    });
+
     tailwind.config = {
       theme: {
         extend: {
@@ -308,7 +444,7 @@
                 <div class="w-20 h-20 rounded-xl overflow-hidden border-3 border-white shadow-xl">
                   <img src="https://img.icons8.com/stickers/1200/attendance-mark.jpg">
                 </div>
-                <i class="fas fa-user-check"></i> Attendance
+                <i class="fas fa-user-check"></i> <span data-translate="attendance">Attendance</span>
               </div>
             </a>
             <a href="/mess/complaints" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
@@ -316,7 +452,7 @@
                 <div class="w-20 h-20 rounded-xl overflow-hidden border-3 border-white shadow-xl">
                   <img src="https://c8.alamy.com/comp/2HEHM9A/complaints-text-on-red-round-grungy-texture-stamp-2HEHM9A.jpg" alt="Complaints" class="w-full h-full object-cover" onerror="this.src='https://picsum.photos/seed/help-desk-support/120/120.jpg'">
                 </div>
-                <i class="fas fa-tasks"></i> Complaints
+                <i class="fas fa-tasks"></i> <span data-translate="complaints">Complaints</span>
               </div>
             </a>
             <a href="/mess/payments" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
@@ -324,7 +460,7 @@
                 <div class="w-20 h-20 rounded-xl overflow-hidden border-3 border-white shadow-xl">
                   <img src="https://www.creativefabrica.com/wp-content/uploads/2021/09/15/Money-finance-cash-payment-icon-Graphics-17346742-1.jpg" alt="Payments" class="w-full h-full object-cover" onerror="this.src='https://picsum.photos/seed/cash-payment/120/120.jpg'">
                 </div>
-                <i class="fas fa-money-bill"></i> Payments
+                <i class="fas fa-money-bill"></i> <span data-translate="payments">Payments</span>
               </div>
             </a>
             <a href="/mess/menu" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
@@ -332,7 +468,7 @@
                 <div class="w-20 h-20 rounded-xl overflow-hidden border-3 border-white shadow-xl">
                   <img src="https://www.blueosa.com/wp-content/uploads/2020/01/the-best-top-10-indian-dishes.jpg" alt="Menu" class="w-full h-full object-cover" onerror="this.src='https://picsum.photos/seed/indian-meal-thali-fresh/120/120.jpg'">
                 </div>
-                <i class="fas fa-utensils"></i> Menu
+                <i class="fas fa-utensils"></i> <span data-translate="menu">Menu</span>
               </div>
             </a>
             <a href="/mess/messoff" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
@@ -340,7 +476,7 @@
                 <div class="w-20 h-20 rounded-xl overflow-hidden border-3 border-white shadow-xl">
                   <img src="https://picsum.photos/seed/calendar-leave-application-form/120/120.jpg" alt="Mess Off" class="w-full h-full object-cover" onerror="this.src='https://picsum.photos/seed/leave-calendar/120/120.jpg'">
                 </div>
-                <i class="fas fa-calendar"></i> Mess Off
+                <i class="fas fa-calendar"></i> <span data-translate="messOff">Mess Off</span>
               </div>
             </a>
             <a href="/mess/settings" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
@@ -348,7 +484,7 @@
                 <div class="w-20 h-20 rounded-xl overflow-hidden border-3 border-white shadow-xl">
                   <img src="https://static.vecteezy.com/system/resources/previews/021/190/084/original/settings-filled-icon-in-transparent-background-basic-app-and-web-ui-bold-line-icon-eps10-free-vector.jpg" alt="Settings" class="w-full h-full object-cover" onerror="this.src='https://picsum.photos/seed/gear-settings/120/120.jpg'">
                 </div>
-                <i class="fas fa-cog"></i> Settings
+                <i class="fas fa-cog"></i> <span data-translate="settings">Settings</span>
               </div>
             </a>
           </div>
@@ -356,7 +492,7 @@
 
         <div class="glass-morphism rounded-xl p-8 mt-8">
           <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-            <i class="fas fa-exclamation-circle text-orange-400"></i> Recent Complaints
+            <i class="fas fa-exclamation-circle text-orange-400"></i> <span data-translate="recentComplaints">Recent Complaints</span>
           </h3>
           <div class="space-y-4">
             <% if (complaints.length === 0) { %>
@@ -364,7 +500,7 @@
                 <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <i class="fas fa-check-circle text-white text-2xl"></i>
                 </div>
-                <p class="text-purple-200">No pending complaints</p>
+                <p class="text-purple-200" data-translate="noComplaints">No pending complaints</p>
               </div>
             <% } else { %>
               <% complaints.forEach(complaint => { %>
@@ -386,7 +522,7 @@
       <div>
         <div class="glass-morphism rounded-xl p-8">
           <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
-            <i class="fas fa-utensils text-orange-400"></i> Today's Menu
+            <i class="fas fa-utensils text-orange-400"></i> <span data-translate="todaysMenu">Today's Menu</span>
           </h3>
           <div class="relative h-80 rounded-xl overflow-hidden">
             <img src="https://img.freepik.com/premium-photo/veg-thali-from-indian-cuisine-food-platter-consists-variety-veggiespaneer-dish-lentils-jeera-riceroti-sweet-dish-curd-onion-etc-selective-focus_726363-844.jpg?w=2000" alt="Indian Meal Thali" class="w-full h-full object-cover" onerror="this.src='https://picsum.photos/seed/colorful-indian-thali-food/800/500.jpg'">
@@ -398,15 +534,15 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <div class="bg-gradient-to-r from-yellow-400 to-orange-400 rounded-lg p-4 hover:scale-105 transform transition-all duration-300">
-              <p class="font-bold text-white text-sm">🌅 Breakfast</p>
+              <p class="font-bold text-white text-sm" data-translate="breakfast">🌅 Breakfast</p>
               <p class="text-sm text-white mt-2">Poha, Jalebi, Tea/Milk</p>
             </div>
             <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-lg p-4 hover:scale-105 transform transition-all duration-300">
-              <p class="font-bold text-white text-sm">🍽️ Lunch</p>
+              <p class="font-bold text-white text-sm" data-translate="lunch">🍽️ Lunch</p>
               <p class="text-sm text-white mt-2">Roti, Chana Masala, Rice, Dal</p>
             </div>
             <div class="bg-gradient-to-r from-purple-400 to-pink-400 rounded-lg p-4 hover:scale-105 transform transition-all duration-300">
-              <p class="font-bold text-white text-sm">🍽️ Dinner</p>
+              <p class="font-bold text-white text-sm" data-translate="dinner">🍽️ Dinner</p>
               <p class="text-sm text-white mt-2">Roti, Sabzi, Dal, Salad</p>
             </div>
           </div>
@@ -415,35 +551,35 @@
 
         <div class="glass-morphism rounded-xl p-8 mt-8">
           <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
-            <i class="fas fa-calculator text-blue-400"></i> Food Calculator
+            <i class="fas fa-calculator text-blue-400"></i> <span data-translate="foodCalculator">Food Calculator</span>
           </h3>
           <div class="space-y-4">
             <div class="bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg p-4">
               <div class="text-white">
-                <p class="font-bold mb-2">🍚️ Daily Food Requirements</p>
+                <p class="font-bold mb-2" data-translate="dailyFoodRequirements">🍚️ Daily Food Requirements</p>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span class="text-purple-200">Students Present:</span>
+                    <span class="text-purple-200" data-translate="studentsPresent">Students Present:</span>
                     <span class="font-bold"><%= todayCount %></span>
                   </div>
                   <div>
-                    <span class="text-purple-200">Rice (kg):</span>
+                    <span class="text-purple-200" data-translate="riceKg">Rice (kg):</span>
                     <span class="font-bold"><%= (todayCount * 0.2).toFixed(1) %></span>
                   </div>
                   <div>
-                    <span class="text-purple-200">Wheat Flour (kg):</span>
+                    <span class="text-purple-200" data-translate="wheatFlourKg">Wheat Flour (kg):</span>
                     <span class="font-bold"><%= (todayCount * 0.15).toFixed(1) %></span>
                   </div>
                   <div>
-                    <span class="text-purple-200">Dal (liters):</span>
+                    <span class="text-purple-200" data-translate="dalLiters">Dal (liters):</span>
                     <span class="font-bold"><%= (todayCount * 0.1).toFixed(1) %></span>
                   </div>
                   <div>
-                    <span class="text-purple-200">Vegetables (kg):</span>
+                    <span class="text-purple-200" data-translate="vegetablesKg">Vegetables (kg):</span>
                     <span class="font-bold"><%= (todayCount * 0.15).toFixed(1) %></span>
                   </div>
                   <div>
-                    <span class="text-purple-200">Rotis:</span>
+                    <span class="text-purple-200" data-translate="rotis">Rotis:</span>
                     <span class="font-bold"><%= (todayCount * 2) %></span>
                   </div>
                 </div>
@@ -452,26 +588,26 @@
             
             <div class="bg-gradient-to-r from-green-400 to-teal-400 rounded-lg p-4">
               <div class="text-white">
-                <p class="font-bold mb-2">📊 Per Student Breakdown</p>
+                <p class="font-bold mb-2" data-translate="perStudentBreakdown">📊 Per Student Breakdown</p>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span class="text-purple-200">Rice:</span>
+                    <span class="text-purple-200" data-translate="riceKg">Rice:</span>
                     <span class="font-bold">200g</span>
                   </div>
                   <div>
-                    <span class="text-purple-200">Flour:</span>
+                    <span class="text-purple-200" data-translate="wheatFlourKg">Flour:</span>
                     <span class="font-bold">150g</span>
                   </div>
                   <div>
-                    <span class="text-purple-200">Dal:</span>
+                    <span class="text-purple-200" data-translate="dalLiters">Dal:</span>
                     <span class="font-bold">100ml</span>
                   </div>
                   <div>
-                    <span class="text-purple-200">Vegetables:</span>
+                    <span class="text-purple-200" data-translate="vegetablesKg">Vegetables:</span>
                     <span class="font-bold">150g</span>
                   </div>
                   <div>
-                    <span class="text-purple-200">Rotis:</span>
+                    <span class="text-purple-200" data-translate="rotis">Rotis:</span>
                     <span class="font-bold">2 pcs</span>
                   </div>
                 </div>
@@ -482,23 +618,23 @@
 
         <div class="glass-morphism rounded-xl p-8 mt-8">
           <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
-            <i class="fas fa-chart-bar text-green-400"></i> Quick Stats
+            <i class="fas fa-chart-bar text-green-400"></i> <span data-translate="quickStats">Quick Stats</span>
           </h3>
           <div class="space-y-3">
             <div class="flex justify-between items-center">
-              <span class="text-purple-200">Total Students</span>
+              <span class="text-purple-200" data-translate="totalStudents">Total Students</span>
               <span class="text-white font-bold"><%= totalStudents || 0 %></span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-purple-200">Active Today</span>
+              <span class="text-purple-200" data-translate="activeToday">Active Today</span>
               <span class="text-white font-bold"><%= todayCount %></span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-purple-200">Mess Off</span>
+              <span class="text-purple-200" data-translate="messOff">Mess Off</span>
               <span class="text-white font-bold"><%= upcomingMessOffs.length %></span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-purple-200">Pending Bills</span>
+              <span class="text-purple-200" data-translate="pendingBills">Pending Bills</span>
               <span class="text-white font-bold"><%= unpaidBills.length %></span>
             </div>
           </div>
@@ -509,72 +645,16 @@
   <%- include('../_footer') %>
   
   <script>
-    // Translation system
-    const translations = {
-      en: {
-        welcome: "Welcome,",
-        managementTools: "Mess Staff Dashboard - Manage Everything Here",
-        todayAttendance: "Today's Attendance",
-        activeComplaints: "Pending Complaints",
-        attendance: "Attendance",
-        complaints: "Complaints", 
-        payments: "Payments",
-        menu: "Menu",
-        messOff: "Mess Off",
-        settings: "Settings"
-      },
-      mr: {
-        welcome: "आपले स्वागत आहे,",
-        managementTools: "मेस स्टाफ डॅशबोर्ड - सर्वकाही येथे व्यवस्थापन करा",
-        todayAttendance: "आजची उपस्थिती",
-        activeComplaints: "प्रलंबित तक्राव",
-        attendance: "उपस्थिती",
-        complaints: "तक्राव",
-        payments: "रक्कमे", 
-        menu: "मेनू",
-        messOff: "मेस बंद",
-        settings: "सेटिंग्ज"
-      }
-    };
-
-    function updatePageLanguage() {
+    // Force language update when page loads
+    setTimeout(function() {
       const lang = localStorage.getItem('selectedLanguage') || 'en';
-      
-      // Update specific elements
-      const welcomeElement = document.querySelector('[data-translate="welcome"]');
-      if (welcomeElement) {
-        const currentText = welcomeElement.innerHTML;
-        const namePart = currentText.match(/<span.*<\/span>/)[0];
-        welcomeElement.innerHTML = translations[lang].welcome + ' ' + namePart + '!';
-      }
-      
-      // Update other elements
       document.querySelectorAll('[data-translate]').forEach(element => {
         const key = element.getAttribute('data-translate');
-        if (translations[lang][key]) {
+        if (translations[lang] && translations[lang][key]) {
           element.textContent = translations[lang][key];
         }
       });
-    }
-
-    // Language selection functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const languageSelect = document.getElementById('languageSelect');
-      if (languageSelect) {
-        languageSelect.addEventListener('change', function() {
-          const selectedLanguage = this.value;
-          localStorage.setItem('selectedLanguage', selectedLanguage);
-          updatePageLanguage();
-        });
-
-        // Set initial language
-        const savedLanguage = localStorage.getItem('selectedLanguage');
-        if (savedLanguage) {
-          languageSelect.value = savedLanguage;
-        }
-        updatePageLanguage();
-      }
-    });
+    }, 200);
   </script>
 </body>
 </html>

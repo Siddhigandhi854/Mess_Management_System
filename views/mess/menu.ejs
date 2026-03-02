@@ -89,15 +89,13 @@
         cancel: "रद्द करा",
         edit: "संपादित करा",
         delete: "हटवा",
-        menuPlanningTips: "मेनू नियोजन टिप्स",
         currentMenuItems: "वर्तमान मेनू आयटम्स",
         noMenuItems: "अजून कोणतेही मेनू आयटम जोडले नाही",
         menuItems: "मेनू आयटम्स",
         menuItemsPlaceholder: "आयटम्स कॉम्मा सह अलग करा (उदा. भात, डाळ, रोटी, सब्जी)",
         separateItems: "एकाधिक आयटम्स कॉम्मा सह अलग करा",
         customDate: "सानुकूल तारीख",
-        edit: "संपादित करा",
-        delete: "हटवा",
+        menuPlanningTips: "मेनू नियोजन टिप्स",
         nutritionalBalance: "पौष्टिक संतुलन",
         includeProteins: "प्रत्येक जेवणात प्रथिने, कार्बोहायड्रेट्स आणि भाज्यांचा समावेश करा",
         varietyIsKey: "विविधता महत्वाची आहे",
@@ -170,24 +168,80 @@
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://wallpaperaccess.com/full/4117465.jpg');
+      background-color: #1a1a2e;
+      background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6)),
+        url('https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
       min-height: 100vh;
+      position: relative;
+      background-repeat: no-repeat;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.15) 0%, 
+        rgba(147, 51, 234, 0.1) 50%, 
+        rgba(236, 72, 153, 0.1) 100%);
+      pointer-events: none;
+      z-index: 2;
     }
     .glass-morphism {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .glass-morphism::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.1), 
+        transparent);
+      transition: all 0.5s;
+    }
+    .glass-morphism:hover::before {
+      left: 100%;
+    }
+    .glass-morphism:hover {
+      border-color: rgba(255, 255, 255, 0.4);
     }
     .btn-primary {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    .btn-primary:hover::before {
+      left: 100%;
     }
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
     }
     .form-input {
       border: 2px solid rgba(255, 255, 255, 0.3);
@@ -200,9 +254,12 @@
       box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
       background: rgba(255, 255, 255, 0.2);
     }
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
   </style>
 </head>
-<body class="min-h-screen" style="background-image: url('https://wallpaperaccess.com/full/4117465.jpg'); background-size: cover; background-position: center; background-attachment: fixed;">
+<body class="min-h-screen" style="background-color: #1a1a2e !important; background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6)), url('https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; min-height: 100vh !important; position: relative !important; background-repeat: no-repeat !important;">
   <%- include('../_header') %>
   <main class="container mx-auto px-6 py-12">
     <div class="mb-8">
