@@ -7,6 +7,79 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script>
+    // Translation system
+    const translations = {
+      en: {
+        welcomeBack: "Welcome Back!",
+        welcomeBackDesc: "Access your mess management dashboard and stay connected with your community.",
+        realTimeUpdates: "Real-time Updates",
+        realTimeUpdatesDesc: "Get instant notifications",
+        analyticsDashboard: "Analytics Dashboard",
+        analyticsDashboardDesc: "Track your attendance",
+        secureAccount: "Secure Account",
+        secureAccountDesc: "Your data is protected",
+        loginTitle: "Login",
+        loginSubtitle: "Sign in to your account to continue",
+        emailAddress: "Email Address",
+        password: "Password",
+        login: "Login",
+        dontHaveAccount: "Don't have an account?",
+        createAccount: "Create Account",
+        invalidCredentials: "Invalid email or password",
+        somethingWentWrong: "Something went wrong"
+      },
+      mr: {
+        welcomeBack: "स्वागत आहे!",
+        welcomeBackDesc: "आपले मेस व्यवस्थापन डॅशबोर्डमध्ये प्रवेश करा आणि आपल्या समुदायाशी जोडले राहा.",
+        realTimeUpdates: "वास्तव-कालीन अपडेट्स",
+        realTimeUpdatesDesc: "त्वरित सूचना मिळवा",
+        analyticsDashboard: "विश्लेषण डॅशबोर्ड",
+        analyticsDashboardDesc: "आपली उपस्थिती ट्रॅक करा",
+        secureAccount: "सुरक्षित खाते",
+        secureAccountDesc: "आपला डेटा सुरक्षित आहे",
+        loginTitle: "लॉगिन",
+        loginSubtitle: "सुरू ठेवण्यासाठी आपल्या खात्यात साइन इन करा",
+        emailAddress: "ईमेल पत्ता",
+        password: "पासवर्ड",
+        login: "लॉगिन",
+        dontHaveAccount: "खाते नाही का?",
+        createAccount: "खाते तयार करा",
+        invalidCredentials: "अवैध ईमेल किंवा पासवर्ड",
+        somethingWentWrong: "काहीतरी चूक झाली"
+      }
+    };
+
+    function updatePageLanguage() {
+      const lang = localStorage.getItem('selectedLanguage') || 'en';
+      
+      // Update all translatable elements
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+    }
+
+    // Language selection functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.addEventListener('change', function() {
+          const selectedLanguage = this.value;
+          localStorage.setItem('selectedLanguage', selectedLanguage);
+          updatePageLanguage();
+        });
+
+        // Set initial language
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        if (savedLanguage) {
+          languageSelect.value = savedLanguage;
+        }
+        updatePageLanguage();
+      }
+    });
+
     tailwind.config = {
       theme: {
         extend: {
@@ -81,16 +154,16 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
       <div class="hidden lg:block">
         <div class="glass-morphism rounded-2xl p-12 text-white animate-float">
-          <h2 class="text-4xl font-bold mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">Welcome Back!</h2>
-          <p class="text-lg mb-8 text-purple-200">Access your mess management dashboard and stay connected with your community.</p>
+          <h2 class="text-4xl font-bold mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent" data-translate="welcomeBack">Welcome Back!</h2>
+          <p class="text-lg mb-8 text-purple-200" data-translate="welcomeBackDesc">Access your mess management dashboard and stay connected with your community.</p>
           <div class="space-y-6">
             <div class="flex items-center gap-4 hover:scale-105 transform transition-all duration-300">
               <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
                 <i class="fas fa-check-circle text-white text-xl"></i>
               </div>
               <div>
-                <h4 class="font-bold text-lg">Real-time Updates</h4>
-                <p class="text-purple-200 text-sm">Get instant notifications</p>
+                <h4 class="font-bold text-lg" data-translate="realTimeUpdates">Real-time Updates</h4>
+                <p class="text-purple-200 text-sm" data-translate="realTimeUpdatesDesc">Get instant notifications</p>
               </div>
             </div>
             <div class="flex items-center gap-4 hover:scale-105 transform transition-all duration-300">
@@ -98,8 +171,8 @@
                 <i class="fas fa-chart-bar text-white text-xl"></i>
               </div>
               <div>
-                <h4 class="font-bold text-lg">Analytics Dashboard</h4>
-                <p class="text-purple-200 text-sm">Track your attendance</p>
+                <h4 class="font-bold text-lg" data-translate="analyticsDashboard">Analytics Dashboard</h4>
+                <p class="text-purple-200 text-sm" data-translate="analyticsDashboardDesc">Track your attendance</p>
               </div>
             </div>
             <div class="flex items-center gap-4 hover:scale-105 transform transition-all duration-300">
@@ -107,8 +180,8 @@
                 <i class="fas fa-shield-alt text-white text-xl"></i>
               </div>
               <div>
-                <h4 class="font-bold text-lg">Secure Account</h4>
-                <p class="text-purple-200 text-sm">Your data is protected</p>
+                <h4 class="font-bold text-lg" data-translate="secureAccount">Secure Account</h4>
+                <p class="text-purple-200 text-sm" data-translate="secureAccountDesc">Your data is protected</p>
               </div>
             </div>
           </div>
@@ -121,8 +194,8 @@
             <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center mx-auto mb-4 animate-pulse-slow">
               <i class="fas fa-sign-in-alt text-white text-2xl"></i>
             </div>
-            <h2 class="text-3xl font-bold text-white">Login</h2>
-            <p class="text-purple-200 mt-2">Sign in to your account to continue</p>
+            <h2 class="text-3xl font-bold text-white" data-translate="loginTitle">Login</h2>
+            <p class="text-purple-200 mt-2" data-translate="loginSubtitle">Sign in to your account to continue</p>
           </div>
 
           <% if (error) { %>
@@ -137,27 +210,27 @@
           <form method="POST" action="/auth/login" class="space-y-6">
             <div>
               <label class="block text-white font-bold mb-2" for="email">
-                <i class="fas fa-envelope mr-2"></i>Email Address
+                <i class="fas fa-envelope mr-2"></i><span data-translate="emailAddress">Email Address</span>
               </label>
               <input class="form-input w-full px-4 py-3 rounded-lg" type="email" id="email" name="email" placeholder="you@example.com" required>
             </div>
 
             <div>
               <label class="block text-white font-bold mb-2" for="password">
-                <i class="fas fa-lock mr-2"></i>Password
+                <i class="fas fa-lock mr-2"></i><span data-translate="password">Password</span>
               </label>
               <input class="form-input w-full px-4 py-3 rounded-lg" type="password" id="password" name="password" placeholder="••••••••" required>
             </div>
 
             <button class="btn-primary w-full text-white px-6 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform" type="submit">
-              <i class="fas fa-sign-in-alt mr-2"></i>Login
+              <i class="fas fa-sign-in-alt mr-2"></i><span data-translate="login">Login</span>
             </button>
           </form>
 
           <div class="mt-8 text-center">
-            <p class="text-purple-200">Don't have an account?</p>
+            <p class="text-purple-200" data-translate="dontHaveAccount">Don't have an account?</p>
             <a href="/auth/register" class="btn-primary text-white px-6 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform inline-block mt-2">
-              <i class="fas fa-user-plus mr-2"></i>Create Account
+              <i class="fas fa-user-plus mr-2"></i><span data-translate="createAccount">Create Account</span>
             </a>
           </div>
         </div>

@@ -16,6 +16,87 @@
 
   <script>
 
+    // Translation system
+    const translations = {
+      en: {
+        registerTitle: "Create Account",
+        registerSubtitle: "Join MessHub and get started today",
+        fullName: "Full Name",
+        emailAddress: "Email Address",
+        password: "Password",
+        role: "Role",
+        student: "Student",
+        messStaff: "Mess Staff",
+        createAccount: "Create Account",
+        alreadyHaveAccount: "Already have an account?",
+        loginHere: "Login here",
+        joinCommunity: "Join Our Community!",
+        communityDesc: "Create an account and start managing your mess efficiently today.",
+        communityFirst: "Community First",
+        communityFirstDesc: "Connected with peers",
+        easyManagement: "Easy Management",
+        easyManagementDesc: "Simple and intuitive",
+        getStartedFast: "Get Started Fast",
+        getStartedFastDesc: "In just a few clicks",
+        emailAlreadyRegistered: "Email already registered",
+        somethingWentWrong: "Something went wrong"
+      },
+      mr: {
+        registerTitle: "खाते तयार करा",
+        registerSubtitle: "मेसहबमध्ये सामील होऊन आजच सुरुवात करा",
+        fullName: "पूर्ण नाव",
+        emailAddress: "ईमेल पत्ता",
+        password: "पासवर्ड",
+        role: "भूमिका",
+        student: "विद्यार्थी",
+        messStaff: "मेस कर्मचारी",
+        createAccount: "खाते तयार करा",
+        alreadyHaveAccount: "आधीच खाते आहे का?",
+        loginHere: "येथे लॉगिन करा",
+        joinCommunity: "आमच्या समुदायात सामील होवा!",
+        communityDesc: "खाते तयार करा आणि आपले मेस कार्यक्षमतेने व्यवस्थापित करण्यास सुरुवात करा.",
+        communityFirst: "समुदाय प्रथम",
+        communityFirstDesc: "सहकाऱ्यांशी जोडले",
+        easyManagement: "सोपे व्यवस्थापन",
+        easyManagementDesc: "साधे आणि अंतर्ज्ञानी",
+        getStartedFast: "जलद सुरुवात करा",
+        getStartedFastDesc: "फक्त काही क्लिकमध्ये",
+        emailAlreadyRegistered: "ईमेल आधीच नोंदणीकृत आहे",
+        somethingWentWrong: "काहीतरी चूक झाली"
+      }
+    };
+
+    function updatePageLanguage() {
+      const lang = localStorage.getItem('selectedLanguage') || 'en';
+      
+      // Update all translatable elements
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+    }
+
+    // Language selection functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.addEventListener('change', function() {
+          const selectedLanguage = this.value;
+          localStorage.setItem('selectedLanguage', selectedLanguage);
+          updatePageLanguage();
+        });
+
+        // Set initial language
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        if (savedLanguage) {
+          languageSelect.value = savedLanguage;
+        }
+        updatePageLanguage();
+      }
+    });
+
     tailwind.config = {
 
       theme: {
@@ -154,9 +235,9 @@
 
         <div class="glass-morphism rounded-2xl p-12 text-white animate-float">
 
-          <h2 class="text-4xl font-bold mb-6 bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent">Join Our Community!</h2>
+          <h2 class="text-4xl font-bold mb-6 bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent" data-translate="joinCommunity">Join Our Community!</h2>
 
-          <p class="text-lg mb-8 text-purple-200">Create an account and start managing your mess efficiently today.</p>
+          <p class="text-lg mb-8 text-purple-200" data-translate="communityDesc">Create an account and start managing your mess efficiently today.</p>
 
           <div class="space-y-6">
 
@@ -170,9 +251,9 @@
 
               <div>
 
-                <h4 class="font-bold text-lg">Community First</h4>
+                <h4 class="font-bold text-lg" data-translate="communityFirst">Community First</h4>
 
-                <p class="text-purple-200 text-sm">Connected with peers</p>
+                <p class="text-purple-200 text-sm" data-translate="communityFirstDesc">Connected with peers</p>
 
               </div>
 
@@ -188,9 +269,9 @@
 
               <div>
 
-                <h4 class="font-bold text-lg">Easy Management</h4>
+                <h4 class="font-bold text-lg" data-translate="easyManagement">Easy Management</h4>
 
-                <p class="text-purple-200 text-sm">Simple and intuitive</p>
+                <p class="text-purple-200 text-sm" data-translate="easyManagementDesc">Simple and intuitive</p>
 
               </div>
 
@@ -206,9 +287,9 @@
 
               <div>
 
-                <h4 class="font-bold text-lg">Get Started Fast</h4>
+                <h4 class="font-bold text-lg" data-translate="getStartedFast">Get Started Fast</h4>
 
-                <p class="text-purple-200 text-sm">In just a few clicks</p>
+                <p class="text-purple-200 text-sm" data-translate="getStartedFastDesc">In just a few clicks</p>
 
               </div>
 
@@ -234,9 +315,9 @@
 
             </div>
 
-            <h2 class="text-3xl font-bold text-white">Create Account</h2>
+            <h2 class="text-3xl font-bold text-white" data-translate="registerTitle">Create Account</h2>
 
-            <p class="text-purple-200 mt-2">Join MessHub and get started today</p>
+            <p class="text-purple-200 mt-2" data-translate="registerSubtitle">Join MessHub and get started today</p>
 
           </div>
 
@@ -266,7 +347,7 @@
 
               <label class="block text-white font-bold mb-2" for="name">
 
-                <i class="fas fa-user mr-2"></i>Full Name
+                <i class="fas fa-user mr-2"></i><span data-translate="fullName">Full Name</span>
 
               </label>
 
@@ -280,7 +361,7 @@
 
               <label class="block text-white font-bold mb-2" for="email">
 
-                <i class="fas fa-envelope mr-2"></i>Email Address
+                <i class="fas fa-envelope mr-2"></i><span data-translate="emailAddress">Email Address</span>
 
               </label>
 
@@ -294,7 +375,7 @@
 
               <label class="block text-white font-bold mb-2" for="password">
 
-                <i class="fas fa-lock mr-2"></i>Password
+                <i class="fas fa-lock mr-2"></i><span data-translate="password">Password</span>
 
               </label>
 
@@ -308,15 +389,15 @@
 
               <label class="block text-white font-bold mb-2" for="role">
 
-                <i class="fas fa-id-card mr-2"></i>Role
+                <i class="fas fa-id-card mr-2"></i><span data-translate="role">Role</span>
 
               </label>
 
               <select class="form-input w-full px-4 py-3 rounded-lg" id="role" name="role">
 
-                <option value="student">Student</option>
+                <option value="student" data-translate="student">Student</option>
 
-                <option value="messKaki">Mess Staff</option>
+                <option value="messKaki" data-translate="messStaff">Mess Staff</option>
 
               </select>
 
@@ -326,7 +407,7 @@
 
             <button class="btn-primary w-full text-white px-6 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform" type="submit">
 
-              <i class="fas fa-user-plus mr-2"></i>Create Account
+              <i class="fas fa-user-plus mr-2"></i><span data-translate="createAccount">Create Account</span>
 
             </button>
 
@@ -336,9 +417,9 @@
 
           <div class="mt-8 text-center">
 
-            <p class="text-purple-200">Already have an account? 
+            <p class="text-purple-200" data-translate="alreadyHaveAccount">Already have an account? 
 
-              <a href="/auth/login" class="text-green-400 font-bold hover:text-teal-400 transition hover:scale-105 transform">Login here</a>
+              <a href="/auth/login" class="text-green-400 font-bold hover:text-teal-400 transition hover:scale-105 transform" data-translate="loginHere">Login here</a>
 
             </p>
 
