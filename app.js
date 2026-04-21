@@ -12,7 +12,12 @@ const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://siddhigandhi53_db_user
 
 mongoose
   .connect(MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
+  .then(async () => {
+    console.log("MongoDB connected");
+    // Initialize meal timings
+    const initializeMealTimings = require('./middleware/initMealTimings');
+    await initializeMealTimings();
+  })
   .catch((err) => {
     console.error("MongoDB connection error:", err.message);
     console.log("⚠️  Running without MongoDB - some features may not work");

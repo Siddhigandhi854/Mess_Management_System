@@ -11,16 +11,25 @@ const attendanceSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    mealType: {
+      type: String,
+      enum: ["breakfast", "lunch", "dinner"],
+      required: true,
+    },
     status: {
       type: String,
-      enum: ["eating", "not_eating", "present", "absent"],
+      enum: ["confirmed", "cancelled"],
       required: true,
+    },
+    markedAt: {
+      type: Date,
+      default: Date.now,
     },
   },
   { timestamps: true }
 );
 
-attendanceSchema.index({ student: 1, date: 1 }, { unique: true });
+attendanceSchema.index({ student: 1, date: 1, mealType: 1 }, { unique: true });
 
 module.exports = mongoose.model("Attendance", attendanceSchema);
 

@@ -17,17 +17,42 @@ exports.getDashboard = async (req, res) => {
     console.log("Start of day:", startOfDay);
     console.log("End of day:", endOfDay);
 
-    // First, let's see all attendance records for today
-    const allAttendanceToday = await Attendance.find({
-      date: { $gte: startOfDay, $lte: endOfDay }
-    }).populate('student');
-    
-    console.log("All attendance records for today:", allAttendanceToday);
+    // Get meal-specific attendance counts for today
+    const mealAttendance = await Attendance.aggregate([
+      {
+        $match: {
+          date: { $gte: startOfDay, $lte: endOfDay },
+          status: "confirmed"
+        }
+      },
+      {
+        $group: {
+          _id: "$mealType",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
 
-    const [todayCount, upcomingMessOffs, complaints, unpaidBills, totalStudents] = await Promise.all([
-      Attendance.countDocuments({
-        date: { $gte: startOfDay, $lte: endOfDay }
-      }), // Count all attendance records for today, not just "eating"
+    // Convert to object for easier access
+    const mealCounts = {
+      breakfast: 0,
+      lunch: 0,
+      dinner: 0
+    };
+    
+    mealAttendance.forEach(meal => {
+      mealCounts[meal._id] = meal.count;
+    });
+
+    console.log("Meal attendance counts:", mealCounts);
+
+    // Get detailed attendance records for display
+    const attendanceDetails = await Attendance.find({
+      date: { $gte: startOfDay, $lte: endOfDay },
+      status: "confirmed"
+    }).populate('student').sort({ mealType: 1, markedAt: 1 });
+
+    const [upcomingMessOffs, complaints, unpaidBills, totalStudents] = await Promise.all([
       MessOff.find({ 
         startDate: { $gte: startOfDay } 
       })
@@ -45,12 +70,12 @@ exports.getDashboard = async (req, res) => {
       User.countDocuments({ role: "student" })
     ]);
 
-    console.log("Today's attendance count (all records):", todayCount);
     console.log("Total students:", totalStudents);
 
     res.render("mess/dashboard", {
       title: "Mess Kaki Dashboard",
-      todayCount,
+      mealCounts,
+      attendanceDetails,
       upcomingMessOffs,
       complaints,
       unpaidBills,
@@ -91,9 +116,15 @@ exports.getAttendance = async (req, res) => {
 exports.getMenu = async (req, res) => {
   try {
     const menus = await Menu.find().sort({ date: 1, weekday: 1 });
+    
+    // Extract query parameters for success/error messages
+    const { success, error } = req.query;
+    
     res.render("mess/menu", {
       title: "Manage Menu",
       menus,
+      success,
+      error,
       currentUser: req.user,
       role: req.user.role
     });
@@ -105,23 +136,46 @@ exports.getMenu = async (req, res) => {
 
 exports.postMenu = async (req, res) => {
   try {
+    console.log("=== Menu Post Debug ===");
+    console.log("Request body:", req.body);
+    
     const { date, weekday, mealType, items } = req.body;
+    
+    // Validate required fields
+    if (!mealType || !items || items.trim() === '') {
+      console.log("Missing required fields");
+      return res.redirect("/mess/menu?error=missing_fields");
+    }
+    
+    // Convert mealType to lowercase to match model enum
+    const normalizedMealType = mealType.toLowerCase();
+    
     const itemsArray = items
       .split(",")
       .map((i) => i.trim())
       .filter(Boolean)
       .map((name) => ({ name }));
 
-    await Menu.create({
+    console.log("Processed items:", itemsArray);
+    console.log("Normalized meal type:", normalizedMealType);
+
+    if (itemsArray.length === 0) {
+      console.log("No valid items provided");
+      return res.redirect("/mess/menu?error=no_items");
+    }
+
+    const menu = await Menu.create({
       date: date || undefined,
       weekday: weekday || undefined,
-      mealType,
+      mealType: normalizedMealType,
       items: itemsArray,
     });
-    res.redirect("/mess/menu");
+    
+    console.log("Menu created successfully:", menu._id);
+    res.redirect("/mess/menu?success=true");
   } catch (err) {
     console.error("Menu error:", err);
-    res.redirect("/mess/menu");
+    res.redirect("/mess/menu?error=server_error");
   }
 };
 

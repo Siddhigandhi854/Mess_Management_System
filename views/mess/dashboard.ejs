@@ -7,105 +7,159 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script>
-    // Translation system - Complete Marathi translation
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'bounce-slow': 'bounce 2s infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            bounce: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script>
+    // Translation system for Mess Dashboard
     const translations = {
       en: {
         welcome: "Welcome",
-        dashboard: "Dashboard",
+        managementTools: "Mess Staff Dashboard - Manage Everything Here",
+        contact: "Contact",
         attendance: "Attendance",
         complaints: "Complaints",
         payments: "Payments",
         menu: "Menu",
         messOff: "Mess Off",
-        settings: "Settings",
-        login: "Login",
-        register: "Register",
-        logout: "Logout",
-        profile: "Profile",
-        home: "Home",
-        quickStats: "Quick Stats",
+        todaysAttendance: "Today's Attendance",
         totalStudents: "Total Students",
-        todayAttendance: "Today's Attendance",
         pendingPayments: "Pending Payments",
         activeComplaints: "Active Complaints",
-        managementTools: "Management Tools",
+        quickActions: "Quick Actions",
+        markAttendance: "Mark Attendance",
+        viewMenu: "View Menu",
+        submitComplaint: "Submit Complaint",
+        makePayment: "Make Payment",
+        requestMessOff: "Request Mess Off",
+        settings: "Settings",
         todaysMenu: "Today's Menu",
         breakfast: "Breakfast",
         lunch: "Lunch",
         dinner: "Dinner",
         recentComplaints: "Recent Complaints",
         noComplaints: "No complaints found",
-        markAttendance: "Mark Attendance",
-        viewMenu: "View Menu",
-        submitComplaint: "Submit Complaint",
-        makePayment: "Make Payment",
-        requestMessOff: "Request Mess Off",
         studentDashboard: "Student Dashboard",
         adminDashboard: "Admin Dashboard",
         staffDashboard: "Staff Dashboard",
-        foodCalculator: "Food Calculator",
-        dailyFoodRequirements: "Daily Food Requirements",
-        studentsPresent: "Students Present",
-        riceKg: "Rice (kg)",
-        wheatFlourKg: "Wheat Flour (kg)",
-        dalLiters: "Dal (liters)",
-        vegetablesKg: "Vegetables (kg)",
-        rotis: "Rotis",
-        perStudentBreakdown: "Per Student Breakdown",
-        totalStudents: "Total Students",
-        activeToday: "Active Today",
+        save: "Save",
+        cancel: "Cancel",
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
         messOff: "Mess Off",
-        pendingBills: "Pending Bills",
-        quickStats: "Quick Stats"
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        contact: "Contact",
+        attendance: "Attendance",
+        complaints: "Complaints",
+        payments: "Payments",
+        menu: "Menu",
+        messOff: "Mess Off",
+        staffDashboard: "Staff Dashboard"
       },
       mr: {
         welcome: "स्वागत",
-        dashboard: "डॅशबोर्ड",
-        attendance: "उपस्थिती",
-        complaints: "तक्राव",
-        payments: "रक्कमे",
-        menu: "मेनू",
-        messOff: "मेस बंद",
-        settings: "सेटिंग्ज",
-        login: "लॉगिन",
-        register: "नोंदणी करा",
-        logout: "लॉगआउट",
-        profile: "प्रोफाइल",
-        home: "होम",
-        quickStats: "जलद आकडेवारी",
+        managementTools: "मेस कर्मचारी डॅशबोर्ड - येथे सर्व व्यवस्थापन करा",
+        todaysAttendance: "आजची उपस्थिती",
         totalStudents: "एकूण विद्यार्थी",
-        todayAttendance: "आजची उपस्थिती",
-        pendingPayments: "प्रलंबित रक्कमे",
-        activeComplaints: "सक्रिय तक्रार",
-        managementTools: "व्यवस्थापन साधने",
-        todaysMenu: "आजचे मेनू",
-        breakfast: "नाश्ता",
-        lunch: "दुपारचे जेवण",
-        dinner: "रात्रीचे जेवण",
-        recentComplaints: "अलीकडील तक्रार",
-        noComplaints: "कोणतेही तक्रार सापडले नाही",
+        pendingPayments: "थांबलेल्या रक्कमा",
+        activeComplaints: "सक्रिय तक्राव",
+        quickActions: "जलद क्रिया",
         markAttendance: "उपस्थिती नक्का करा",
         viewMenu: "मेनू पहा",
-        submitComplaint: "तक्रार सबमिट करा",
+        submitComplaint: "तक्राव सबमिट करा",
         makePayment: "रक्कम करा",
         requestMessOff: "मेस बंद विनंती करा",
+        settings: "सेटिंग्ज",
+        todaysMenu: "आजचे मेनू",
+        breakfast: "जेवण",
+        lunch: "दुपारचे जेवण",
+        dinner: "रात्रीचे जेवण",
+        recentComplaints: "अलीकडील तक्राव",
+        noComplaints: "कोणतेही तक्राव सापडले नाही",
         studentDashboard: "विद्यार्थी डॅशबोर्ड",
         adminDashboard: "अडमिन डॅशबोर्ड",
-        staffDashboard: "स्टाफ डॅशबोर्ड",
-        foodCalculator: "अन्न कॅल्क्युलेटर",
-        dailyFoodRequirements: "दैनिक अन्न आवश्यकता",
-        studentsPresent: "उपस्थित विद्यार्थी:",
-        riceKg: "तांदूळ (किलो)",
-        wheatFlourKg: "गहू चे पीठ (किलो)",
-        dalLiters: "डाळ (लिटर)",
-        vegetablesKg: "भाज्या (किलो)",
-        rotis: "रोटी",
-        perStudentBreakdown: "प्रति विद्यार्थी तपशील",
-        totalStudents: "एकूण विद्यार्थी",
-        activeToday: "आज सक्रिय",
-        messOffCount: "मेस बंद",
-        pendingBills: "प्रलंबित बिले",
-        quickStats: "जलद आकडेवारी"
+        staffDashboard: "स्टाफ डॅशबोर्ड"
       }
     };
 
@@ -115,7 +169,7 @@
       // Update all translatable elements
       document.querySelectorAll('[data-translate]').forEach(element => {
         const key = element.getAttribute('data-translate');
-        if (translations[lang][key]) {
+        if (translations[lang] && translations[lang][key]) {
           element.textContent = translations[lang][key];
         }
       });
@@ -140,30 +194,8 @@
       }
       
       // Also update language immediately in case header is loaded after
-      setTimeout(updatePageLanguage, 100);
+      setTimeout(updatePageLanguage, 200);
     });
-
-    tailwind.config = {
-      theme: {
-        extend: {
-          animation: {
-            'float': 'float 6s ease-in-out infinite',
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'bounce-slow': 'bounce 2s infinite',
-          },
-          keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-10px)' },
-            },
-            bounce: {
-              '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-20px)' },
-            }
-          }
-        }
-      }
-    }
   </script>
   <style>
     * {
@@ -380,17 +412,63 @@
       </div>
       <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow text-glow" data-translate="welcome">Welcome, <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"><%= currentUser.name %></span>!</h1>
       <p class="text-purple-200 text-lg" data-translate="managementTools">Mess Staff Dashboard - Manage Everything Here</p>
+      <div class="mt-4 flex items-center gap-3 bg-white bg-opacity-10 rounded-lg px-4 py-2 inline-block">
+        <i class="fas fa-phone text-green-400"></i>
+        <span class="text-white font-medium"><span data-translate="contact">Contact</span>: 7218097304</span>
+      </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
       <div class="stat-card rounded-xl p-6 border-l-4 border-blue-400 hover-lift">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-purple-200 font-semibold" data-translate="todayAttendance">Today's Attendance</p>
-            <p class="text-3xl font-bold text-white mt-2"><%= todayCount %></p>
+            <p class="text-purple-200 font-semibold" data-translate="todaysAttendance">Today's Attendance</p>
+            <p class="text-3xl font-bold text-white mt-2">
+              <%= mealCounts.breakfast + mealCounts.lunch + mealCounts.dinner %>
+            </p>
+            <p class="text-xs text-purple-300 mt-1">Total Confirmed</p>
           </div>
           <div class="w-14 h-14 bg-blue-400 rounded-full flex items-center justify-center animate-pulse">
             <i class="fas fa-users text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card rounded-xl p-6 border-l-4 border-yellow-400 hover-lift">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-purple-200 font-semibold" data-translate="breakfast">Breakfast</p>
+            <p class="text-3xl font-bold text-white mt-2"><%= mealCounts.breakfast %></p>
+            <p class="text-xs text-purple-300 mt-1">Confirmed</p>
+          </div>
+          <div class="w-14 h-14 bg-yellow-400 rounded-full flex items-center justify-center animate-pulse">
+            <i class="fas fa-sun text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card rounded-xl p-6 border-l-4 border-green-400 hover-lift">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-purple-200 font-semibold" data-translate="lunch">Lunch</p>
+            <p class="text-3xl font-bold text-white mt-2"><%= mealCounts.lunch %></p>
+            <p class="text-xs text-purple-300 mt-1">Confirmed</p>
+          </div>
+          <div class="w-14 h-14 bg-green-400 rounded-full flex items-center justify-center animate-pulse">
+            <i class="fas fa-utensils text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card rounded-xl p-6 border-l-4 border-purple-400 hover-lift">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-purple-200 font-semibold" data-translate="dinner">Dinner</p>
+            <p class="text-3xl font-bold text-white mt-2"><%= mealCounts.dinner %></p>
+            <p class="text-xs text-purple-300 mt-1">Confirmed</p>
+          </div>
+          <div class="w-14 h-14 bg-purple-400 rounded-full flex items-center justify-center animate-pulse">
+            <i class="fas fa-moon text-white text-2xl"></i>
           </div>
         </div>
       </div>
@@ -444,7 +522,7 @@
                 <div class="w-20 h-20 rounded-xl overflow-hidden border-3 border-white shadow-xl">
                   <img src="https://img.icons8.com/stickers/1200/attendance-mark.jpg">
                 </div>
-                <i class="fas fa-user-check"></i> <span data-translate="attendance">Attendance</span>
+                <i class="fas fa-user-check"></i> <span data-translate="attendance"></span>Attendance</span>
               </div>
             </a>
             <a href="/mess/complaints" class="btn-primary text-white px-4 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform block text-center">
@@ -534,15 +612,15 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <div class="bg-gradient-to-r from-yellow-400 to-orange-400 rounded-lg p-4 hover:scale-105 transform transition-all duration-300">
-              <p class="font-bold text-white text-sm" data-translate="breakfast">🌅 Breakfast</p>
+              <p class="font-bold text-white text-sm" data-translate="breakfast">Breakfast</p>
               <p class="text-sm text-white mt-2">Poha, Jalebi, Tea/Milk</p>
             </div>
             <div class="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-lg p-4 hover:scale-105 transform transition-all duration-300">
-              <p class="font-bold text-white text-sm" data-translate="lunch">🍽️ Lunch</p>
+              <p class="font-bold text-white text-sm" data-translate="lunch">Lunch</p>
               <p class="text-sm text-white mt-2">Roti, Chana Masala, Rice, Dal</p>
             </div>
             <div class="bg-gradient-to-r from-purple-400 to-pink-400 rounded-lg p-4 hover:scale-105 transform transition-all duration-300">
-              <p class="font-bold text-white text-sm" data-translate="dinner">🍽️ Dinner</p>
+              <p class="font-bold text-white text-sm" data-translate="dinner">Dinner</p>
               <p class="text-sm text-white mt-2">Roti, Sabzi, Dal, Salad</p>
             </div>
           </div>
@@ -551,36 +629,36 @@
 
         <div class="glass-morphism rounded-xl p-8 mt-8">
           <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
-            <i class="fas fa-calculator text-blue-400"></i> <span data-translate="foodCalculator">Food Calculator</span>
+            <i class="fas fa-calculator text-blue-400"></i> Food Calculator
           </h3>
           <div class="space-y-4">
             <div class="bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg p-4">
               <div class="text-white">
-                <p class="font-bold mb-2" data-translate="dailyFoodRequirements">🍚️ Daily Food Requirements</p>
+                <p class="font-bold mb-2">🍚️ Daily Food Requirements</p>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span class="text-purple-200" data-translate="studentsPresent">Students Present:</span>
-                    <span class="font-bold"><%= todayCount %></span>
+                    <span class="text-purple-200">Students Present:</span>
+                    <span class="font-bold"><%= mealCounts.breakfast + mealCounts.lunch + mealCounts.dinner %></span>
                   </div>
                   <div>
-                    <span class="text-purple-200" data-translate="riceKg">Rice (kg):</span>
-                    <span class="font-bold"><%= (todayCount * 0.2).toFixed(1) %></span>
+                    <span class="text-purple-200">Rice (kg):</span>
+                    <span class="font-bold"><%= ((mealCounts.breakfast + mealCounts.lunch + mealCounts.dinner) * 0.2).toFixed(1) %></span>
                   </div>
                   <div>
-                    <span class="text-purple-200" data-translate="wheatFlourKg">Wheat Flour (kg):</span>
-                    <span class="font-bold"><%= (todayCount * 0.15).toFixed(1) %></span>
+                    <span class="text-purple-200">Wheat Flour (kg):</span>
+                    <span class="font-bold"><%= ((mealCounts.breakfast + mealCounts.lunch + mealCounts.dinner) * 0.15).toFixed(1) %></span>
                   </div>
                   <div>
-                    <span class="text-purple-200" data-translate="dalLiters">Dal (liters):</span>
-                    <span class="font-bold"><%= (todayCount * 0.1).toFixed(1) %></span>
+                    <span class="text-purple-200">Dal (liters):</span>
+                    <span class="font-bold"><%= ((mealCounts.breakfast + mealCounts.lunch + mealCounts.dinner) * 0.1).toFixed(1) %></span>
                   </div>
                   <div>
-                    <span class="text-purple-200" data-translate="vegetablesKg">Vegetables (kg):</span>
-                    <span class="font-bold"><%= (todayCount * 0.15).toFixed(1) %></span>
+                    <span class="text-purple-200">Vegetables (kg):</span>
+                    <span class="font-bold"><%= ((mealCounts.breakfast + mealCounts.lunch + mealCounts.dinner) * 0.15).toFixed(1) %></span>
                   </div>
                   <div>
-                    <span class="text-purple-200" data-translate="rotis">Rotis:</span>
-                    <span class="font-bold"><%= (todayCount * 2) %></span>
+                    <span class="text-purple-200">Rotis:</span>
+                    <span class="font-bold"><%= (mealCounts.breakfast + mealCounts.lunch + mealCounts.dinner) * 2 %></span>
                   </div>
                 </div>
               </div>
@@ -588,26 +666,26 @@
             
             <div class="bg-gradient-to-r from-green-400 to-teal-400 rounded-lg p-4">
               <div class="text-white">
-                <p class="font-bold mb-2" data-translate="perStudentBreakdown">📊 Per Student Breakdown</p>
+                <p class="font-bold mb-2">📊 Per Student Breakdown</p>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span class="text-purple-200" data-translate="riceKg">Rice:</span>
+                    <span class="text-purple-200">Rice:</span>
                     <span class="font-bold">200g</span>
                   </div>
                   <div>
-                    <span class="text-purple-200" data-translate="wheatFlourKg">Flour:</span>
+                    <span class="text-purple-200">Flour:</span>
                     <span class="font-bold">150g</span>
                   </div>
                   <div>
-                    <span class="text-purple-200" data-translate="dalLiters">Dal:</span>
+                    <span class="text-purple-200">Dal:</span>
                     <span class="font-bold">100ml</span>
                   </div>
                   <div>
-                    <span class="text-purple-200" data-translate="vegetablesKg">Vegetables:</span>
+                    <span class="text-purple-200">Vegetables:</span>
                     <span class="font-bold">150g</span>
                   </div>
                   <div>
-                    <span class="text-purple-200" data-translate="rotis">Rotis:</span>
+                    <span class="text-purple-200">Rotis:</span>
                     <span class="font-bold">2 pcs</span>
                   </div>
                 </div>
@@ -618,23 +696,23 @@
 
         <div class="glass-morphism rounded-xl p-8 mt-8">
           <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
-            <i class="fas fa-chart-bar text-green-400"></i> <span data-translate="quickStats">Quick Stats</span>
+            <i class="fas fa-chart-bar text-green-400"></i> Quick Stats
           </h3>
           <div class="space-y-3">
             <div class="flex justify-between items-center">
-              <span class="text-purple-200" data-translate="totalStudents">Total Students</span>
+              <span class="text-purple-200">Total Students</span>
               <span class="text-white font-bold"><%= totalStudents || 0 %></span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-purple-200" data-translate="activeToday">Active Today</span>
-              <span class="text-white font-bold"><%= todayCount %></span>
+              <span class="text-purple-200">Active Today</span>
+              <span class="text-white font-bold"><%= mealCounts.breakfast + mealCounts.lunch + mealCounts.dinner %></span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-purple-200" data-translate="messOff">Mess Off</span>
+              <span class="text-purple-200">Mess Off</span>
               <span class="text-white font-bold"><%= upcomingMessOffs.length %></span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-purple-200" data-translate="pendingBills">Pending Bills</span>
+              <span class="text-purple-200">Pending Bills</span>
               <span class="text-white font-bold"><%= unpaidBills.length %></span>
             </div>
           </div>
@@ -644,17 +722,5 @@
   </main>
   <%- include('../_footer') %>
   
-  <script>
-    // Force language update when page loads
-    setTimeout(function() {
-      const lang = localStorage.getItem('selectedLanguage') || 'en';
-      document.querySelectorAll('[data-translate]').forEach(element => {
-        const key = element.getAttribute('data-translate');
-        if (translations[lang] && translations[lang][key]) {
-          element.textContent = translations[lang][key];
-        }
-      });
-    }, 200);
-  </script>
-</body>
+  </body>
 </html>

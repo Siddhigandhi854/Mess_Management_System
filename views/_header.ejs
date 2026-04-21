@@ -20,17 +20,17 @@
         </div>
         
         <% if (!currentUser) { %>
-          <a href="/" class="hover:text-purple-200 transition font-medium hover:scale-105 transform">Home</a>
-          <a href="/auth/login" class="hover:text-purple-200 transition font-medium hover:scale-105 transform">Login</a>
-          <a href="/auth/register" class="bg-white text-purple-600 px-6 py-2 rounded-lg font-bold hover:shadow-xl transition hover:scale-105 transform">Register</a>
+          <a href="/" class="hover:text-purple-200 transition font-medium hover:scale-105 transform" data-translate="home">Home</a>
+          <a href="/auth/login" class="hover:text-purple-200 transition font-medium hover:scale-105 transform" data-translate="login">Login</a>
+          <a href="/auth/register" class="bg-white text-purple-600 px-6 py-2 rounded-lg font-bold hover:shadow-xl transition hover:scale-105 transform" data-translate="register">Register</a>
         <% } else { %>
           <div class="flex items-center gap-6">
             <% if (role === 'student') { %>
-              <a href="/student/dashboard" class="hover:text-purple-200 transition hover:scale-105 transform">Dashboard</a>
+              <a href="/student/dashboard" class="hover:text-purple-200 transition hover:scale-105 transform" data-translate="dashboard">Dashboard</a>
             <% } else if (role === 'messKaki') { %>
-              <a href="/mess/dashboard" class="hover:text-purple-200 transition hover:scale-105 transform">Dashboard</a>
+              <a href="/mess/dashboard" class="hover:text-purple-200 transition hover:scale-105 transform" data-translate="dashboard">Dashboard</a>
             <% } else if (role === 'admin') { %>
-              <a href="/admin/dashboard" class="hover:text-purple-200 transition hover:scale-105 transform">Dashboard</a>
+              <a href="/admin/dashboard" class="hover:text-purple-200 transition hover:scale-105 transform" data-translate="dashboard">Dashboard</a>
             <% } %>
             <div class="flex items-center gap-3 glass-morphism px-4 py-2 rounded-xl">
               <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
@@ -41,7 +41,7 @@
                 <p class="text-xs text-purple-200"><%= role === 'messKaki' ? 'Mess Staff' : (role ? role.charAt(0).toUpperCase() + role.slice(1) : 'Guest') %></p>
               </div>
             </div>
-            <a href="/auth/logout" class="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 transition font-medium hover:scale-105 transform shadow-lg"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="/auth/logout" class="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 transition font-medium hover:scale-105 transform shadow-lg"><i class="fas fa-sign-out-alt"></i> <span data-translate="logout">Logout</span></a>
           </div>
         <% } %>
       </nav>
@@ -50,6 +50,38 @@
 </header>
 
 <script>
+// Translation system
+const translations = {
+  en: {
+    home: "Home",
+    login: "Login",
+    register: "Register",
+    dashboard: "Dashboard",
+    logout: "Logout",
+    messStaff: "Mess Staff"
+  },
+  mr: {
+    home: "मुख्यपृष्ठ",
+    login: "लॉगिन",
+    register: "नोंदणी", 
+    dashboard: "डॅशबोर्ड",
+    logout: "लॉगआउट",
+    messStaff: "मेस स्टाफ"
+  }
+};
+
+function updateHeaderLanguage() {
+  const lang = localStorage.getItem('selectedLanguage') || 'en';
+  
+  // Update all translatable elements
+  document.querySelectorAll('[data-translate]').forEach(element => {
+    const key = element.getAttribute('data-translate');
+    if (translations[lang] && translations[lang][key]) {
+      element.textContent = translations[lang][key];
+    }
+  });
+}
+
 // Language selection functionality
 document.getElementById('languageSelect').addEventListener('change', function() {
   const selectedLanguage = this.value;
@@ -57,9 +89,8 @@ document.getElementById('languageSelect').addEventListener('change', function() 
   // Store language preference in localStorage
   localStorage.setItem('selectedLanguage', selectedLanguage);
   
-  // Reload page to apply language changes
-  // In a full implementation, this would trigger translation
-  location.reload();
+  // Update language immediately
+  updateHeaderLanguage();
 });
 
 // Set initial language from localStorage
@@ -68,5 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
   if (savedLanguage) {
     document.getElementById('languageSelect').value = savedLanguage;
   }
+  updateHeaderLanguage();
 });
 </script>

@@ -1,4 +1,5 @@
 const Attendance = require("../models/Attendance");
+const MealTiming = require("../models/MealTiming");
 const Menu = require("../models/Menu");
 const Complaint = require("../models/Complaint");
 const MessOff = require("../models/MessOff");
@@ -9,6 +10,41 @@ exports.getDashboard = async (req, res) => {
     const today = new Date();
     const startOfDay = new Date(today.setHours(0, 0, 0, 0));
     const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+    const todayWeekday = today.toLocaleDateString('en-US', { weekday: 'long' });
+
+    // Get today's menu
+    console.log("=== Student Dashboard Menu Debug ===");
+    console.log("Today:", today);
+    console.log("Weekday:", todayWeekday);
+    console.log("Start of day:", startOfDay);
+    console.log("End of day:", endOfDay);
+
+    const menus = await Menu.find({
+      $or: [
+        { date: { $gte: startOfDay, $lte: endOfDay } },
+        { weekday: todayWeekday }
+      ]
+    }).sort({ date: 1, mealType: 1 });
+
+    console.log("Found menus:", menus.length);
+    menus.forEach(menu => {
+      console.log("Meal:", menu.mealType, "Items:", menu.items.map(item => item.name).join(', '));
+    });
+
+    // Group by meal type
+    const todaysMenu = {
+      breakfast: [],
+      lunch: [],
+      dinner: []
+    };
+
+    menus.forEach(menuItem => {
+      if (todaysMenu[menuItem.mealType.toLowerCase()]) {
+        todaysMenu[menuItem.mealType.toLowerCase()] = menuItem.items.map(item => item.name);
+      }
+    });
+
+    console.log("Final todaysMenu:", todaysMenu);
 
     const [todayAttendance, complaints, upcomingMessOffs, unpaidBills] = await Promise.all([
       Attendance.findOne({
@@ -29,6 +65,7 @@ exports.getDashboard = async (req, res) => {
       complaints,
       upcomingMessOffs,
       unpaidBills,
+      todaysMenu,
       currentUser: req.user,
       role: req.user.role
     });
@@ -43,16 +80,38 @@ exports.getAttendance = async (req, res) => {
     const date = req.query.date ? new Date(req.query.date) : new Date();
     const startOfDay = new Date(date.setHours(0, 0, 0, 0));
     const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+    const currentTime = new Date();
 
-    const record = await Attendance.findOne({
+    // Get meal timings
+    const mealTimings = await MealTiming.find({ isActive: true }).sort({ mealType: 1 });
+    
+    // Get student's meal attendance for today
+    const attendanceRecords = await Attendance.find({
       student: req.user._id,
       date: { $gte: startOfDay, $lte: endOfDay },
+    }).sort({ mealType: 1 });
+
+    // Check which meals are still available for marking
+    const mealStatus = {};
+    mealTimings.forEach(timing => {
+      const [hours, minutes] = timing.cutoffTime.split(':').map(Number);
+      const cutoffTime = new Date();
+      cutoffTime.setHours(hours, minutes, 0, 0);
+      
+      mealStatus[timing.mealType] = {
+        canMark: currentTime < cutoffTime,
+        cutoffTime: timing.cutoffTime,
+        mealTime: `${timing.mealStartTime} - ${timing.mealEndTime}`,
+        marked: attendanceRecords.find(record => record.mealType === timing.mealType)
+      };
     });
 
     res.render("student/attendance", {
-      title: "Daily Attendance",
+      title: "Meal Attendance",
       date: date,
-      record,
+      mealTimings,
+      mealStatus,
+      attendanceRecords,
       currentUser: req.user,
       role: req.user.role
     });
@@ -64,44 +123,65 @@ exports.getAttendance = async (req, res) => {
 
 exports.postAttendance = async (req, res) => {
   try {
-    const { status } = req.body;
+    const { mealType, status } = req.body;
     const date = new Date();
     const startOfDay = new Date(date.setHours(0, 0, 0, 0));
     const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+    const currentTime = new Date();
 
     console.log("=== Student Post Attendance Debug ===");
-    console.log("Status from form:", status);
+    console.log("Meal Type:", mealType);
+    console.log("Status:", status);
     console.log("User ID:", req.user._id);
-    console.log("Date:", date);
-    console.log("Start of day:", startOfDay);
-    console.log("End of day:", endOfDay);
+    console.log("Current Time:", currentTime);
 
-    // Check if attendance already exists for today
+    // Get meal timing to check cutoff time
+    const mealTiming = await MealTiming.findOne({ mealType, isActive: true });
+    if (!mealTiming) {
+      console.log("Meal timing not found for:", mealType);
+      return res.redirect("/student/attendance?error=meal_not_found");
+    }
+
+    // Check if current time is before cutoff time
+    const [hours, minutes] = mealTiming.cutoffTime.split(':').map(Number);
+    const cutoffTime = new Date();
+    cutoffTime.setHours(hours, minutes, 0, 0);
+
+    if (currentTime >= cutoffTime) {
+      console.log("Cutoff time passed for:", mealType);
+      return res.redirect(`/student/attendance?error=cutoff_passed&meal=${mealType}`);
+    }
+
+    // Check if attendance already exists for this meal today
     const existing = await Attendance.findOne({
       student: req.user._id,
       date: { $gte: startOfDay, $lte: endOfDay },
+      mealType: mealType,
     });
-
-    console.log("Existing attendance:", existing);
 
     if (existing) {
       // Update existing attendance
-      await Attendance.findByIdAndUpdate(existing._id, { status });
-      console.log("Updated existing attendance with status:", status);
+      await Attendance.findByIdAndUpdate(existing._id, { 
+        status: status || "confirmed",
+        markedAt: new Date()
+      });
+      console.log("Updated existing attendance for meal:", mealType);
     } else {
       // Create new attendance record
       const newAttendance = await Attendance.create({
         student: req.user._id,
         date: new Date(),
-        status: status || "eating",
+        mealType: mealType,
+        status: status || "confirmed",
+        markedAt: new Date(),
       });
-      console.log("Created new attendance:", newAttendance);
+      console.log("Created new attendance for meal:", mealType);
     }
 
-    res.redirect("/student/dashboard");
+    res.redirect("/student/attendance?success=true");
   } catch (err) {
     console.error("Post attendance error:", err);
-    res.redirect("/student/attendance");
+    res.redirect("/student/attendance?error=server_error");
   }
 };
 

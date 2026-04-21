@@ -51,6 +51,19 @@
       transform: translateY(-2px);
       box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
     }
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+    }
+    .btn-disabled {
+      background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
     .form-input {
       border: 2px solid rgba(255, 255, 255, 0.3);
       background: rgba(255, 255, 255, 0.1);
@@ -67,82 +80,125 @@
     }
   </style>
 </head>
-<body>
+<body style="background-color: #2d1b1b; background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7));">
   <%- include('../_header') %>
   <main class="container mx-auto px-6 py-12">
     <div class="mb-8">
-      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Daily Attendance</h1>
-      <p class="text-purple-200 text-lg">Mark your attendance for today</p>
+      <h1 class="text-5xl font-bold text-white mb-2 animate-pulse-slow">Meal Attendance</h1>
+      <p class="text-purple-200 text-lg">Mark your attendance for each meal before cutoff time</p>
     </div>
+
+    <% if (typeof success !== 'undefined' && success === 'true') { %>
+      <div class="bg-green-500 text-white px-6 py-3 rounded-lg mb-6 flex items-center gap-3">
+        <i class="fas fa-check-circle"></i>
+        <span>Attendance marked successfully!</span>
+      </div>
+    <% } %>
+
+    <% if (typeof error !== 'undefined') { %>
+      <div class="bg-red-500 text-white px-6 py-3 rounded-lg mb-6 flex items-center gap-3">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>
+          <% if (error === 'cutoff_passed') { %>
+            Cutoff time passed for <%= req.query.meal %>. Please mark attendance before the cutoff time.
+          <% } else if (error === 'meal_not_found') { %>
+            Meal timing configuration not found.
+          <% } else { %>
+            An error occurred while marking attendance.
+          <% } %>
+        </span>
+      </div>
+    <% } %>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div class="lg:col-span-2">
         <div class="glass-morphism rounded-xl p-8">
           <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-            <i class="fas fa-calendar-check text-green-400"></i> Mark Attendance
+            <i class="fas fa-calendar-check text-green-400"></i> Mark Meal Attendance
           </h2>
           
-          <% if (record && record.status) { %>
-            <div class="bg-gradient-to-r from-green-400 to-green-600 rounded-lg p-6 mb-6">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                  <i class="fas fa-check-circle text-white text-2xl"></i>
-                </div>
+          <% Object.keys(mealStatus).forEach(mealType => { %>
+            <div class="mb-6 p-6 bg-white bg-opacity-10 rounded-lg">
+              <div class="flex justify-between items-center mb-4">
                 <div>
-                  <h3 class="text-white font-bold text-lg">Already Marked</h3>
-                  <p class="text-green-100">Your attendance for today has been recorded as: <span class="font-bold"><%= record.status %></span></p>
+                  <h3 class="text-xl font-bold text-white capitalize"><%= mealType %></h3>
+                  <p class="text-purple-200 text-sm">Meal Time: <%= mealStatus[mealType].mealTime %></p>
+                  <p class="text-purple-200 text-sm">Cutoff Time: <%= mealStatus[mealType].cutoffTime %></p>
+                </div>
+                <div class="text-right">
+                  <% if (mealStatus[mealType].marked) { %>
+                    <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">
+                      <i class="fas fa-check mr-1"></i> Marked
+                    </span>
+                  <% } else if (mealStatus[mealType].canMark) { %>
+                    <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">
+                      <i class="fas fa-clock mr-1"></i> Available
+                    </span>
+                  <% } else { %>
+                    <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm">
+                      <i class="fas fa-times mr-1"></i> Closed
+                    </span>
+                  <% } %>
                 </div>
               </div>
-            </div>
-          <% } %>
 
-          <form method="POST" action="/student/attendance" class="space-y-6">
-            <div>
-              <label class="block text-white font-bold mb-2" for="date">
-                <i class="fas fa-calendar mr-2"></i>Date
-              </label>
-              <input type="date" id="date" name="date" value="<%= date.toISOString().split('T')[0] %>" 
-                     class="form-input w-full px-4 py-3 rounded-lg" required>
+              <% if (mealStatus[mealType].marked) { %>
+                <div class="bg-green-400 bg-opacity-20 rounded-lg p-4">
+                  <p class="text-white text-center">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    You have confirmed attendance for <%= mealType %>
+                  </p>
+                </div>
+              <% } else if (mealStatus[mealType].canMark) { %>
+                <form method="POST" action="/student/attendance" class="space-y-4">
+                  <input type="hidden" name="mealType" value="<%= mealType %>">
+                  <div>
+                    <label class="block text-white font-bold mb-2">Status</label>
+                    <select name="status" class="form-input w-full px-4 py-3 rounded-lg" required>
+                      <option value="confirmed">Will Eat</option>
+                      <option value="cancelled">Won't Eat</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn-success w-full text-white px-4 py-3 rounded-lg font-bold transition hover:scale-105 transform">
+                    <i class="fas fa-check mr-2"></i> Mark <%= mealType.charAt(0).toUpperCase() + mealType.slice(1) %> Attendance
+                  </button>
+                </form>
+              <% } else { %>
+                <div class="bg-red-400 bg-opacity-20 rounded-lg p-4">
+                  <p class="text-white text-center">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    Cutoff time passed. Cannot mark attendance for <%= mealType %>.
+                  </p>
+                </div>
+              <% } %>
             </div>
-
-            <div>
-              <label class="block text-white font-bold mb-2" for="status">
-                <i class="fas fa-user-check mr-2"></i>Status
-              </label>
-              <select id="status" name="status" class="form-input w-full px-4 py-3 rounded-lg" required>
-                <option value="">Select Status</option>
-                <option value="present">Present</option>
-                <option value="absent">Absent</option>
-                <option value="late">Late</option>
-              </select>
-            </div>
-
-            <button type="submit" class="btn-primary w-full text-white px-6 py-3 rounded-lg hover:shadow-xl font-bold text-lg transition hover:scale-105 transform">
-              <i class="fas fa-save mr-2"></i> Mark Attendance
-            </button>
-          </form>
+          <% }) %>
         </div>
       </div>
 
       <div>
         <div class="glass-morphism rounded-xl p-8">
           <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
-            <i class="fas fa-info-circle text-blue-400"></i> Attendance Info
+            <i class="fas fa-info-circle text-blue-400"></i> Meal Attendance Info
           </h3>
           <div class="space-y-4">
             <div class="bg-white bg-opacity-10 rounded-lg p-4">
               <h4 class="text-white font-bold mb-2">Why Mark Attendance?</h4>
-              <p class="text-purple-200 text-sm">Regular attendance tracking helps maintain mess operations and ensures proper meal planning.</p>
+              <p class="text-purple-200 text-sm">Helps mess staff prepare exact quantity of food and reduce waste.</p>
             </div>
             
             <div class="bg-white bg-opacity-10 rounded-lg p-4">
-              <h4 class="text-white font-bold mb-2">Timing</h4>
-              <p class="text-purple-200 text-sm">Mark your attendance before meal times for accurate records.</p>
+              <h4 class="text-white font-bold mb-2">Cutoff Times</h4>
+              <p class="text-purple-200 text-sm">
+                <strong>Breakfast:</strong> Before 7:00 AM<br>
+                <strong>Lunch:</strong> Before 11:00 AM<br>
+                <strong>Dinner:</strong> Before 6:00 PM
+              </p>
             </div>
             
             <div class="bg-white bg-opacity-10 rounded-lg p-4">
               <h4 class="text-white font-bold mb-2">Benefits</h4>
-              <p class="text-purple-200 text-sm">Consistent attendance may qualify you for meal discounts and special offers.</p>
+              <p class="text-purple-200 text-sm">Accurate meal planning helps reduce food waste and ensures everyone gets proper meals.</p>
             </div>
           </div>
         </div>
