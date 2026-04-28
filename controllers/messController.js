@@ -195,19 +195,41 @@ exports.getFoodCalculator = async (req, res) => {
     const startOfDay = new Date(date.setHours(0, 0, 0, 0));
     const endOfDay = new Date(date.setHours(23, 59, 59, 999));
 
-    const [count, config] = await Promise.all([
-      Attendance.countDocuments({
-        date: { $gte: startOfDay, $lte: endOfDay },
-        status: "eating",
-      }),
-      FoodQuantityConfig.findOne(),
-    ]);
+    // Get or create default food config
+    let config = await FoodQuantityConfig.findOne();
+    if (!config) {
+      config = await FoodQuantityConfig.create({
+        ricePerStudentKg: 0.25,
+        dalPerStudentL: 0.2,
+        sabjiPerStudentKg: 0.2,
+        rotiPerStudentCount: 2
+      });
+    }
+
+    const count = await Attendance.countDocuments({
+      date: { $gte: startOfDay, $lte: endOfDay },
+      status: "eating",
+    });
+
+    // Calculate quantities if config exists
+    let quantities = null;
+    if (config && count > 0) {
+      // Add 10% extra for wastage
+      const multiplier = 1.1;
+      quantities = {
+        riceKg: Math.round((config.ricePerStudentKg * count * multiplier) * 100) / 100,
+        dalL: Math.round((config.dalPerStudentL * count * multiplier) * 100) / 100,
+        sabjiKg: Math.round((config.sabjiPerStudentKg * count * multiplier) * 100) / 100,
+        rotis: Math.round(config.rotiPerStudentCount * count * multiplier)
+      };
+    }
 
     res.render("mess/foodCalculator", {
       title: "Food Calculator",
       date,
       count,
       config,
+      quantities,
       currentUser: req.user,
       role: req.user.role
     });

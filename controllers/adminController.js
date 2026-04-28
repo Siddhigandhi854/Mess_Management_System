@@ -97,15 +97,35 @@ exports.postFoodConfig = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.find().sort({ createdAt: -1 });
+    console.log("=== Admin Users Debug ===");
+    console.log("User:", req.user);
+    
+    // Get users from database with error handling
+    let users = [];
+    try {
+      users = await User.find().sort({ createdAt: -1 }) || [];
+      console.log("Found users:", users.length);
+    } catch (dbErr) {
+      console.error("Database error:", dbErr);
+      users = [];
+    }
+    
+    // Ensure users is always an array
+    const usersData = Array.isArray(users) ? users : [];
+    
+    // Pass query parameters to template
+    const query = req.query;
+    
     res.render("admin/users", { 
       title: "User Management", 
-      users, 
+      users: usersData, 
       currentUser: req.user || { name: "Admin User" }, 
-      role: req.user?.role || "admin" 
+      role: req.user?.role || "admin",
+      query: query // Pass query parameters to template
     });
   } catch (err) {
     console.error("Users error:", err);
+    console.error("Error stack:", err.stack);
     res.status(500).render("500", { title: "Server Error" });
   }
 };
@@ -196,6 +216,33 @@ exports.getDatabase = async (req, res) => {
   } catch (err) {
     console.error("Database error:", err);
     res.status(500).render("500", { title: "Server Error" });
+  }
+};
+
+exports.createUser = async (req, res) => {
+  try {
+    const { name, email, role } = req.body;
+    
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.redirect("/admin/users?error=user_exists");
+    }
+    
+    // Create new user with default password
+    const defaultPassword = "123456"; // You should change this to a more secure approach
+    const newUser = await User.create({
+      name,
+      email,
+      role,
+      password: defaultPassword // In production, you should hash this password
+    });
+    
+    console.log("Created new user:", newUser);
+    res.redirect("/admin/users?success=user_created");
+  } catch (err) {
+    console.error("Create user error:", err);
+    res.redirect("/admin/users?error=server_error");
   }
 };
 
