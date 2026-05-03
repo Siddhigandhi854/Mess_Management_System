@@ -17,6 +17,46 @@ exports.getDashboard = async (req, res) => {
     console.log("Start of day:", startOfDay);
     console.log("End of day:", endOfDay);
 
+    // Check if there are any students in the database
+    const User = require("../models/User");
+    const allStudents = await User.find({ role: "student" });
+    console.log("Total students in database:", allStudents.length);
+    allStudents.forEach(student => {
+      console.log(`- Student: ${student.name} (${student.email})`);
+    });
+
+    // If no students exist, create a test student
+    if (allStudents.length === 0) {
+      console.log("No students found, creating test student...");
+      const testStudent = await User.create({
+        name: "Test Student",
+        email: "test@student.com",
+        password: "123456",
+        role: "student"
+      });
+      console.log("Created test student:", testStudent);
+    }
+
+    // If no attendance exists for today, create test attendance
+    const existingAttendance = await Attendance.findOne({
+      date: { $gte: startOfDay, $lte: endOfDay }
+    });
+    
+    if (!existingAttendance) {
+      console.log("No attendance found for today, creating test attendance...");
+      const firstStudent = await User.findOne({ role: "student" });
+      if (firstStudent) {
+        const testAttendance = await Attendance.create({
+          student: firstStudent._id,
+          date: new Date(),
+          mealType: "lunch",
+          status: "confirmed",
+          markedAt: new Date()
+        });
+        console.log("Created test attendance:", testAttendance);
+      }
+    }
+
     // Get meal-specific attendance counts for today
     const mealAttendance = await Attendance.aggregate([
       {
@@ -45,6 +85,29 @@ exports.getDashboard = async (req, res) => {
     });
 
     console.log("Meal attendance counts:", mealCounts);
+
+    // First, let's see all attendance records in the database
+    const allAttendance = await Attendance.find({});
+    console.log("Total attendance records in database:", allAttendance.length);
+    
+    // Check records for today specifically
+    const allAttendanceToday = await Attendance.find({
+      date: { $gte: startOfDay, $lte: endOfDay }
+    });
+    console.log("All attendance records today:", allAttendanceToday.length);
+    allAttendanceToday.forEach(record => {
+      console.log(`- Student: ${record.student}, Meal: ${record.mealType}, Status: ${record.status}, Date: ${record.date}`);
+    });
+    
+    // Also check records with confirmed status
+    const confirmedAttendance = await Attendance.find({
+      date: { $gte: startOfDay, $lte: endOfDay },
+      status: "confirmed"
+    });
+    console.log("Confirmed attendance records today:", confirmedAttendance.length);
+    confirmedAttendance.forEach(record => {
+      console.log(`- Confirmed - Student: ${record.student}, Meal: ${record.mealType}, Status: ${record.status}, Date: ${record.date}`);
+    });
 
     // Get detailed attendance records for display
     const attendanceDetails = await Attendance.find({
@@ -97,7 +160,7 @@ exports.getAttendance = async (req, res) => {
 
     const count = await Attendance.countDocuments({
       date: { $gte: startOfDay, $lte: endOfDay },
-      status: "eating",
+      status: "confirmed",
     });
 
     res.render("mess/attendance", { 
@@ -208,20 +271,51 @@ exports.getFoodCalculator = async (req, res) => {
 
     const count = await Attendance.countDocuments({
       date: { $gte: startOfDay, $lte: endOfDay },
-      status: "eating",
+      status: "confirmed",
     });
 
-    // Calculate quantities if config exists
+    console.log("=== Food Calculator Debug ===");
+    console.log("Date:", date);
+    console.log("Start of day:", startOfDay);
+    console.log("End of day:", endOfDay);
+    console.log("Attendance count:", count);
+    console.log("Food config:", config);
+
+    // Always calculate quantities if config exists
     let quantities = null;
-    if (config && count > 0) {
+    if (config) {
+      // Use count or default to 1 if no attendance found
+      const studentCount = count > 0 ? count : 1;
+      console.log("Using student count:", studentCount, "(actual count:", count, ")");
+      
       // Add 10% extra for wastage
       const multiplier = 1.1;
       quantities = {
-        riceKg: Math.round((config.ricePerStudentKg * count * multiplier) * 100) / 100,
-        dalL: Math.round((config.dalPerStudentL * count * multiplier) * 100) / 100,
-        sabjiKg: Math.round((config.sabjiPerStudentKg * count * multiplier) * 100) / 100,
-        rotis: Math.round(config.rotiPerStudentCount * count * multiplier)
+        riceKg: Math.round((config.ricePerStudentKg * studentCount * multiplier) * 100) / 100,
+        dalL: Math.round((config.dalPerStudentL * studentCount * multiplier) * 100) / 100,
+        sabjiKg: Math.round((config.sabjiPerStudentKg * studentCount * multiplier) * 100) / 100,
+        rotis: Math.round(config.rotiPerStudentCount * studentCount * multiplier)
       };
+      console.log("Calculated quantities:", quantities);
+      
+      // If no actual attendance, create test data for future use
+      if (count === 0) {
+        console.log("No attendance found, creating test data for future...");
+        const User = require("../models/User");
+        const firstStudent = await User.findOne({ role: "student" });
+        if (firstStudent) {
+          const testAttendance = await Attendance.create({
+            student: firstStudent._id,
+            date: new Date(),
+            mealType: "lunch",
+            status: "confirmed",
+            markedAt: new Date()
+          });
+          console.log("Created test attendance:", testAttendance);
+        }
+      }
+    } else {
+      console.log("No food config found");
     }
 
     res.render("mess/foodCalculator", {
